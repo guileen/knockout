@@ -1,28 +1,31 @@
-#switch-user
-  form(method='post', action='/login').form-inline
-    if(username)
-      span current user is 
-        strong= username
-      &nbsp;
-      input.input-small(name='username', placeholder=username)
-      button.btn(type='submit') switch user
-      &nbsp;
-      a.btn.btn-primary#upload upload image
-    else
+header
+  if(username)
+    span current user is 
+      a#username(href="javascript:void(0)")= username
+    &nbsp;
+    form(method='get', action='/search').form-search.inline
+      input.input-medium.search-query(type="search", name="q")
+      button.btn(type="submit") Search
+    &nbsp;
+    a.btn.btn-primary#upload upload image
+  else
+    form(method='post', action='/login').form-inline
       span not login
       &nbsp;
       input.input-small(name='username', placeholder=username)
       button.btn.btn-primary(type='submit') Login
 
-if(locals.imageLeft)
-  #left-image.thumbnail
-    a(href="/#{imageLeft.id}/ko/#{imageRight.id}")
-      img(src=imageLeft.url)
+if(locals.foundPair)
+  .ko-stage
+    if(locals.imageLeft)
+      #left-image.thumbnail
+        a(href="/#{imageLeft.id}/ko/#{imageRight.id}")
+          img(src=imageLeft.url)
 
-if(locals.imageRight)
-  #right-image.thumbnail
-    a(href="/#{imageRight.id}/ko/#{imageLeft.id}")
-      img(src=imageRight.url)
+    if(locals.imageRight)
+      #right-image.thumbnail
+        a(href="/#{imageRight.id}/ko/#{imageLeft.id}")
+          img(src=imageRight.url)
 
 #top-images
   if(locals.hotImages)
@@ -35,26 +38,49 @@ script#upload-content(type="template")
   form(action='/upload', method='post').form-inline
     input(name="imageurl", placeholder="http://")
     button.btn.btn-primary(type='submit') +
-  a.btn.btn-danger#close-popover close
+  a.btn.btn-danger.close-popover close
+
+script#switch-user(type="template")
+  form(method='post', action='/login').form-inline
+    input.input-small(name='username', placeholder=username)
+    button.btn(type='submit') switch user
+  a.btn.btn-danger.close-popover close
 
 script
   (function(){
   var $upload = $('#upload');
+  var $username = $('#username');
 
       $upload.popover({
-          trigger: 'focus'
+          trigger: 'manual'
         , html: true
         , placement: 'bottom'
         , content: function() {
-          return $('#upload-content').html().replace('{id}', 123).replace('{title}', 'abcd');
+          return $('#upload-content').html();
+        }
+      });
+
+      $username.popover({
+          trigger: 'manual'
+        , html: true
+        , placement: 'bottom'
+        , content: function() {
+          return $('#switch-user').html()
         }
       });
 
    $upload.live('click', function() {
         $upload.popover('show');
-        $('#close-popover').click(function() {
+        $('.close-popover').click(function() {
           $upload.popover('hide');
         })
     });
+
+    $username.live('click', function() {
+      $username.popover('show');
+        $('.close-popover').click(function() {
+          $username.popover('hide');
+        })
+    })
 
   })();

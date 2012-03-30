@@ -1,6 +1,8 @@
 var exports = module.exports = function(app) {
 
   var redis = require('redis').createClient()
+    , request = require('request')
+    , crypto = require('crypto')
     , async = require('async');
 
   function isCompared(imagei, imagej) {
@@ -12,7 +14,7 @@ var exports = module.exports = function(app) {
       var user = req.session.username
         , user_images = user + ':images'
         ;
-      redis.zrange(user_images, 0, 10, function(err, imageids) {
+      redis.zrevrange(user_images, 0, 100, function(err, imageids) {
           if(err) {return next(err);}
           async.map(imageids, function(imageid, _callback) {
               redis.multi()
@@ -26,16 +28,17 @@ var exports = module.exports = function(app) {
                     , koby = image.koby = data[2]
                     ;
                   image.id = imageid;
-                  // 被击败的计数 *2, 为了让优秀的图片能更多的比较
-                  image.sort = (ko ? ko.length : 0) + 2 * (koby ? koby.length : 0);
+                  image.sort = (ko ? ko.length : 0) + (koby ? koby.length : 0);
                   _callback(err, image);
               });
           }, function(err, images) {
 
+            var foundPair = false;
             var imagei, imagej;
 
             // sort by vote count to compare images never compared
-            var sortImages = images.slice();
+            var sortImages = images.filter(function(image) { return image.sort < 2 });
+
             sortImages.sort(function(a, b) {
                 return a.sort > b.sort
             });
@@ -45,14 +48,29 @@ var exports = module.exports = function(app) {
               for(var j = i + 1; j < images.length; j++) {
                 imagej = sortImages[j];
                 if(!isCompared(imagei, imagej)) {
+                  foundPair = true;
                   i = j = images.length;
+                }
+              }
+            }
+
+            if(!foundPair) {
+              for(var off = 1; off < images.length; off++) {
+                for(var i = 0; i < images.length - off; i++) {
+                  imagei = images[i];
+                  imagej = images[i + off];
+                  if(!isCompared(imagei, imagej)) {
+                    foundPair = true;
+                    off = i = images.length;
+                  }
                 }
               }
             }
 
             if(err) {return next(err);}
             res.render('index', {
-                hotImages: images
+                hotImages: images.slice(0, 30)
+              , foundPair: foundPair
               , imageLeft: imagei
               , imageRight: imagej
             });
@@ -76,19 +94,11 @@ var exports = module.exports = function(app) {
         return next('input ' + imageurl + ' is not url')
       }
 
-      redis.incr('imageid', function(err, id) {
+      addImage(user, {url: imageurl}, function(err, data) {
           if(err) {return next(err);}
-          var imageid = 'image:' + id;
-          redis.multi()
-          .hmset(imageid, {
-              url : imageurl
-          })
-          .zadd(user_images, 0, imageid)
-          .exec(function(err, data) {
-              if(err) {return next(err);}
-              res.redirect('/');
-          });
+          res.redirect('/');
       })
+
   });
 
   app.get('/:left/ko/:right', function(req, res, next) {
@@ -96,15 +106,107 @@ var exports = module.exports = function(app) {
       // right - 1
       var left = req.params.left
         , right = req.params.right
+        , user = req.session.username
         ;
       redis.multi()
       .sadd(left + ':KO', right)
       .sadd(right + ':KOby', left)
+      .zincrby(user + ':images', 1, left)
+      .zincrby(user + ':images', -1, right)
       .exec(function(err, data) {
           if(err) {return next(err);}
           res.redirect('/');
       });
 
   });
+
+  app.get('/search', function(req, res, next) {
+      var keyword = req.query.q
+        , username = req.session.username;
+
+      loadPage(0, function(err, data) {
+          if(err) {return next(err);}
+          var pages = data.cursor.pages;
+          async.map(pages, function(page, _callback) {
+              console.log('page');
+              console.log(page);
+              loadPage(page.start, _callback)
+          }, function(err, data) {
+              if(err) {return next(err);}
+              res.redirect('/');
+          });
+      });
+
+      function loadPage(start, callback) {
+        googleImageSearch(keyword, start, function(err, data) {
+            if(err) {return callback(err);}
+            async.map(data.results, function(image, _callback) {
+                addImage(username, image, _callback);
+            }, function(err, _data) {
+                if(err) {return callback(err);}
+                callback(null, data)
+            });
+        })
+      }
+  });
+
+  // --------- data api
+
+  function addImage(user, image, callback) {
+    var url = image.url;
+    var imageid = 'image:' + md5(url); // checksum the result is best way
+
+    redis.multi()
+    .hmset(imageid, image)
+    .zadd(user + ':images', 0, imageid)
+    .exec(callback);
+  }
+
+  // ......... google Image Search API
+  // page, 0-index
+  function googleImageSearch(options, start, callback) {
+    // https://developers.google.com/image-search/v1/jsondevguide#json_reference
+    if(!options) return callback(new Error('googleImageSearch: options or keyword required'));
+
+    if(typeof options == 'string') {
+      options = {
+        q: options
+      }
+    }
+
+    if(!options.q) {
+      callback(new Error('googleImageSearch: options.q is required'));
+    }
+    options.v = '1.0'
+    options.imgsz = options.imgsz || 'large'
+    options.rsz = options.rsz || 8;
+    options.start = start || 0;
+    request({
+        url: 'https://ajax.googleapis.com/ajax/services/search/images'
+      , qs : options
+      , headers : {
+          Referer: 'http://localhost:3000/'
+        }
+      }, function(err, response, body) {
+      if(err) return callback(err);
+      var data = JSON.parse(body);
+      if(data.responseStatus != 200) {
+        console.log(data);
+        return callback(new Error(data.responseDetails));
+      }
+      callback(null, data.responseData);
+    })
+  }
+
+  // ---------- utils
+  function md5(str) {
+    return hash('md5', str);
+  }
+
+  function hash(algorithm, str){
+    var hash = crypto.createHash(algorithm);
+    hash.update(str);
+    return hash.digest('hex');
+  }
 
 }

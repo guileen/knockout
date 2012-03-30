@@ -23,7 +23,7 @@ app.configure(function(){
 });
 
 app.configure('development', function(){
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
+  // app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
 });
 
 app.configure('production', function(){
@@ -33,9 +33,19 @@ app.configure('production', function(){
 app.locals({
     title: 'HD-images'
 });
+
 app.dynamicHelpers({
     username: function(req) {return req.session.username}
   , url: function(req) {return req.url}
+});
+
+app.use(function(err, req, res, next) {
+    if (err instanceof Error) {
+      console.log(err.stack);
+    } else {
+      console.log(err);
+    }
+    next(err);
 });
 
 // Routes
