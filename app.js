@@ -5,6 +5,9 @@
 
 var express = require('express')
   , routes = require('./routes')
+  , util = require('util')
+  , myconsole = require('myconsole')
+  , RedisStore = require('connect-redis')(express);
 
 var app = module.exports = express.createServer();
 
@@ -16,22 +19,27 @@ app.configure(function(){
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(express.cookieParser());
-  app.use(express.session({ secret: 'your secret here' }));
-  app.use(express.compiler({ src: __dirname + '/public', enable: ['less'] }));
+  app.use(express.session({ secret: "keyboard cat", store: new RedisStore }));
+  // app.use(express.compiler({ src: __dirname + '/public', enable: ['less'] }));
   app.use(app.router);
-  app.use(express.static(__dirname + '/public'));
+  // app.use(express.static(__dirname + '/public'));
 });
+
+app.get('/assets/*', express.compiler({ src: __dirname + '/public', enable: ['less'] }));
+
+app.get('/assets/*', express.static(__dirname + '/public'));
 
 app.configure('development', function(){
   // app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
 });
 
 app.configure('production', function(){
-  app.use(express.errorHandler()); 
+  // app.use(express.errorHandler()); 
 });
 
 app.locals({
     title: 'HD-images'
+  , debug: app.settings.env == 'development'
 });
 
 app.dynamicHelpers({
@@ -40,11 +48,7 @@ app.dynamicHelpers({
 });
 
 app.use(function(err, req, res, next) {
-    if (err instanceof Error) {
-      console.log(err.stack);
-    } else {
-      console.log(err);
-    }
+    myconsole.traceError(err);
     next(err);
 });
 

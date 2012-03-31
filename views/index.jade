@@ -17,19 +17,15 @@ header
 
 if(locals.foundPair)
   .ko-stage
-    if(locals.imageLeft)
-      #left-image
-        a(href="/#{imageLeft.id}/remove") Delete
-        .thumbnail
-          a(href="/#{imageLeft.id}/ko/#{imageRight.id}")
-            img(src=imageLeft.url)
+    each image, i in pkImages
+      .pk-image(class='pk-image-#{i}')
 
-    if(locals.imageRight)
-      #right-image
-        a(href="/#{imageRight.id}/remove") Delete
+        a.btn(href="/#{image.id}/remove")
+          i.icon-trash
+          | Delete
         .thumbnail
-          a(href="/#{imageRight.id}/ko/#{imageLeft.id}")
-            img(src=imageRight.url)
+          a(href="/#{image.id}/ko/#{joinImageId(pkImages, image)}")
+            img(src=image.url)
 
 #top-images
   if(locals.hotImages)
@@ -50,41 +46,4 @@ script#switch-user(type="template")
     button.btn(type='submit') switch user
   a.btn.btn-danger.close-popover close
 
-script
-  (function(){
-  var $upload = $('#upload');
-  var $username = $('#username');
-
-      $upload.popover({
-          trigger: 'manual'
-        , html: true
-        , placement: 'bottom'
-        , content: function() {
-          return $('#upload-content').html();
-        }
-      });
-
-      $username.popover({
-          trigger: 'manual'
-        , html: true
-        , placement: 'bottom'
-        , content: function() {
-          return $('#switch-user').html()
-        }
-      });
-
-   $upload.live('click', function() {
-        $upload.popover('show');
-        $('.close-popover').click(function() {
-          $upload.popover('hide');
-        })
-    });
-
-    $username.live('click', function() {
-      $username.popover('show');
-        $('.close-popover').click(function() {
-          $username.popover('hide');
-        })
-    })
-
-  })();
+script(src='/javascripts/main.js')

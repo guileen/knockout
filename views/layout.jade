@@ -2,11 +2,17 @@
 html
   head
     title= title
-    link(rel='stylesheet', href='/stylesheets/bootstrap.css')
-    link(rel='stylesheet', href='/stylesheets/style.css')
-    script(src='/javascripts/jquery-1.7.1.min.js')
-    script(src='/javascripts/bootstrap-tooltip.js')
-    script(src='/javascripts/bootstrap-popover.js')
+    if(debug)
+      link(rel='stylesheet', href='/assets/css/bootstrap.css')
+      script(src='/assets/js/jquery-1.7.1.min.js')
+      script(src='/assets/js/bootstrap-tooltip.js')
+      script(src='/assets/js/bootstrap-popover.js')
+    else
+      link(rel='stylesheet', href='http://twitter.github.com/bootstrap/assets/css/bootstrap.css')
+      script(src='http://code.jquery.com/jquery-1.7.2.min.js')
+      script(src='http://twitter.github.com/bootstrap/assets/js/bootstrap-tooltip.js')
+      script(src='http://twitter.github.com/bootstrap/assets/js/bootstrap-popover.js')
+    link(rel='stylesheet', href='/assets/css/style.css')
   body
     .container
       != body

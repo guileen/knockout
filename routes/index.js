@@ -2,12 +2,21 @@ var exports = module.exports = function(app) {
 
   var redis = require('redis').createClient()
     , request = require('request')
+    , myconsole = require('myconsole')
     , crypto = require('crypto')
     , async = require('async');
 
   function isCompared(imagei, imagej) {
     return (imagei.ko && imagei.ko.indexOf(imagej.id) >= 0) ||
            (imagej.ko && imagej.ko.indexOf(imagei.id) >= 0);
+  }
+
+  function joinImageId(images, exclude) {
+    return images.filter(function(i) {
+        return i != exclude;
+    }).map(function(i) {
+        return i.id;
+    }).join('--');
   }
 
   app.get('/', function(req, res){
@@ -43,6 +52,7 @@ var exports = module.exports = function(app) {
                 return a.sort > b.sort
             });
 
+            // 无人比较的图片优先
             for(var i = 0; i < sortImages.length - 1; i++) {
               imagei = sortImages[i];
               for(var j = i + 1; j < images.length; j++) {
@@ -54,6 +64,7 @@ var exports = module.exports = function(app) {
               }
             }
 
+            // 有人比较的图片优先比较得分较高排名相近的
             if(!foundPair) {
               for(var off = 1; off < images.length; off++) {
                 for(var i = 0; i < images.length - off; i++) {
@@ -71,8 +82,8 @@ var exports = module.exports = function(app) {
             res.render('index', {
                 hotImages: images.slice(0, 100)
               , foundPair: foundPair
-              , imageLeft: imagei
-              , imageRight: imagej
+              , pkImages: [imagei, imagej]
+              , joinImageId: joinImageId
             });
           });
       });
@@ -155,22 +166,20 @@ var exports = module.exports = function(app) {
       loadPage(0, function(err, data) {
           if(err) {return next(err);}
           var pages = data.cursor.pages;
-          async.map(pages, function(page, _callback) {
+          async.forEachSeries(pages, function(page, _callback) {
               console.log('page');
               console.log(page);
               loadPage(page.start, _callback)
-          }, function(err, data) {
-              if(err) {return next(err);}
-              res.redirect('/');
-          });
+          }, myconsole.ifError );
+          res.redirect('/');
       });
 
       function loadPage(start, callback) {
         googleImageSearch(keyword, start, function(err, data) {
             if(err) {return callback(err);}
-            async.map(data.results, function(image, _callback) {
+            async.forEach(data.results, function(image, _callback) {
                 addImage(username, image, _callback);
-            }, function(err, _data) {
+            }, function(err) {
                 if(err) {return callback(err);}
                 callback(null, data)
             });
@@ -185,7 +194,7 @@ var exports = module.exports = function(app) {
     delete image.unescapedUrl;
     var imageid = 'image:' + md5(url); // checksum the result is best way
 
-    console.log(image);
+    myconsole.dir(image);
 
     redis.multi()
     .hmset(imageid, image)
@@ -212,12 +221,19 @@ var exports = module.exports = function(app) {
     options.imgsz = options.imgsz || 'large'
     options.rsz = options.rsz || 8;
     options.start = start || 0;
+    var timeout = 5000;
+    if(options.timeout) {
+      timeout = options.timeout;
+      delete options.timeout;
+    }
     request({
         url: 'https://ajax.googleapis.com/ajax/services/search/images'
       , qs : options
       , headers : {
           Referer: 'http://localhost:3000/'
         }
+      , timeout : timeout
+      // , strictSSL: true
       }, function(err, response, body) {
       if(err) return callback(err);
       var data = JSON.parse(body);
@@ -225,6 +241,7 @@ var exports = module.exports = function(app) {
         console.log(data);
         return callback(new Error(data.responseDetails));
       }
+      console.log(data)
       callback(null, data.responseData);
     })
   }
