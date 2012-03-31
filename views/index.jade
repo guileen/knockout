@@ -18,21 +18,25 @@ header
 if(locals.foundPair)
   .ko-stage
     if(locals.imageLeft)
-      #left-image.thumbnail
-        a(href="/#{imageLeft.id}/ko/#{imageRight.id}")
-          img(src=imageLeft.url)
+      #left-image
+        a(href="/#{imageLeft.id}/remove") Delete
+        .thumbnail
+          a(href="/#{imageLeft.id}/ko/#{imageRight.id}")
+            img(src=imageLeft.url)
 
     if(locals.imageRight)
-      #right-image.thumbnail
-        a(href="/#{imageRight.id}/ko/#{imageLeft.id}")
-          img(src=imageRight.url)
+      #right-image
+        a(href="/#{imageRight.id}/remove") Delete
+        .thumbnail
+          a(href="/#{imageRight.id}/ko/#{imageLeft.id}")
+            img(src=imageRight.url)
 
 #top-images
   if(locals.hotImages)
     each image in hotImages
       span
         // TODO thumbnail it
-        img.thumbnail.thumbnail-small(src=image.url)
+        img.thumbnail.thumbnail-small(src=image.tbUrl)
 
 script#upload-content(type="template")
   form(action='/upload', method='post').form-inline

@@ -14,7 +14,7 @@ var exports = module.exports = function(app) {
       var user = req.session.username
         , user_images = user + ':images'
         ;
-      redis.zrevrange(user_images, 0, 100, function(err, imageids) {
+      redis.zrevrange(user_images, 0, 1000, function(err, imageids) {
           if(err) {return next(err);}
           async.map(imageids, function(imageid, _callback) {
               redis.multi()
@@ -69,7 +69,7 @@ var exports = module.exports = function(app) {
 
             if(err) {return next(err);}
             res.render('index', {
-                hotImages: images.slice(0, 30)
+                hotImages: images.slice(0, 100)
               , foundPair: foundPair
               , imageLeft: imagei
               , imageRight: imagej
@@ -101,22 +101,50 @@ var exports = module.exports = function(app) {
 
   });
 
+  app.get('/:imageid/remove', function(req, res, next) {
+      var imageid = req.params.imageid
+        , user = req.session.username
+        ;
+      redis.zrem(user + ':images', imageid, function(err, data) {
+          if(err) {return next(err);}
+          res.redirect('/');
+      })
+  })
+
   app.get('/:left/ko/:right', function(req, res, next) {
       // left + 1
       // right - 1
       var left = req.params.left
         , right = req.params.right
         , user = req.session.username
+        , user_images = user + ':images'
         ;
       redis.multi()
-      .sadd(left + ':KO', right)
-      .sadd(right + ':KOby', left)
-      .zincrby(user + ':images', 1, left)
-      .zincrby(user + ':images', -1, right)
+      .smembers(left + ':KOby')
+      .smembers(right + ':KO')
       .exec(function(err, data) {
           if(err) {return next(err);}
-          res.redirect('/');
-      });
+          var koby = data[0]
+            , ko = data[1]
+            ;
+          async.map(koby, function(id, _callback) {
+              redis.zincrby(user_images, 0.5, id, _callback);
+          }, function(){})
+
+          async.map(ko, function(id, _callback) {
+              redis.zincrby(user_images, -0.5, id, _callback);
+          }, function(){})
+
+          redis.multi()
+          .sadd(left + ':KO', right)
+          .sadd(right + ':KOby', left)
+          .zincrby(user + ':images', 1, left)
+          .zincrby(user + ':images', -1, right)
+          .exec(function(err, data) {
+              if(err) {return next(err);}
+              res.redirect('/');
+          });
+      })
 
   });
 
@@ -153,8 +181,11 @@ var exports = module.exports = function(app) {
   // --------- data api
 
   function addImage(user, image, callback) {
-    var url = image.url;
+    var url = image.url = (image.unescapedUrl || image.url);
+    delete image.unescapedUrl;
     var imageid = 'image:' + md5(url); // checksum the result is best way
+
+    console.log(image);
 
     redis.multi()
     .hmset(imageid, image)
