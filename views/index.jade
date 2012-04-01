@@ -8,6 +8,9 @@ header
       button.btn(type="submit") Search
     &nbsp;
     a.btn.btn-primary#upload upload image
+    - var marklet_code = '(function(a){if(!window.__IMGKO_LOADED__){var b=a.createElement("script");b.src="{marklet_loader_js}?"+Math.floor(new Date/1e7),a.body.appendChild(b)}})(document)'.replace('{marklet_loader_js}', config.marklet_loader_js)
+    &nbsp;
+    a.btn#marklet-tool(href='javascript:void(#{marklet_code})') 采集工具
   else
     form(method='post', action='/login').form-inline
       span not login
