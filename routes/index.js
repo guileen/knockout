@@ -217,6 +217,12 @@ var exports = module.exports = function(app) {
       }
   });
 
+  app.get('/test-marklet', function(req, res, next) {
+      res.render('test-marklet', {
+
+      });
+  })
+
   // --------- data api
 
   function addImage(user, image, callback) {

@@ -8,6 +8,7 @@ if (!window.jQuery) {
   loadjs('http://code.jquery.com/jquery-1.7.2.min.js');
 }
 loadcss('http://dev:3000/assets/css/marklet.css');
+loadjs('http://dev:3000/assets/js/marklet-template.js');
 loadjs('http://dev:3000/assets/js/marklet.js');
 
 function loadcss(url) {
