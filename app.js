@@ -10,6 +10,9 @@ var express = require('express')
   , config = require('./config')
   , RedisStore = require('connect-redis')(express);
 
+// apply configuration
+myconsole.replace();
+
 var app = module.exports = express.createServer();
 
 var development = app.settings.env == 'development'

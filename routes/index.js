@@ -1,7 +1,9 @@
 var exports = module.exports = function(app) {
 
   var redis = require('redis').createClient()
+    , config = require('../config')
     , request = require('request')
+    , fs = require('fs')
     , myconsole = require('myconsole')
     , crypto = require('crypto')
     , async = require('async');
@@ -119,6 +121,34 @@ var exports = module.exports = function(app) {
       redis.zrem(user + ':images', imageid, function(err, data) {
           if(err) {return next(err);}
           res.redirect('/');
+      })
+  })
+
+  app.get('/:imageid/reload', function(req, res, next) {
+      var imageid = req.params.imageid
+        , filename = imageid.substring(6)
+        , tempFilename = config.tmpUploadFolder + filename
+        , realFilename = config.uploadFoler + filename
+        ;
+
+      redis.hget(imageid, 'url', function(err, url) {
+          if(err) {return next(err);}
+          console.log(url);
+          var crawler = request({url: url, headers : {
+                Referer: url
+          }});
+          crawler.pipe(res);
+          crawler.pipe(fs.createWriteStream(tempFilename));
+          crawler.on('error', function(err) {
+              console.traceError(err);
+              res.end();
+          });
+          crawler.on('end', function() {
+              fs.rename(tempFilename, realFilename, function(err) {
+                  if(err) {return console.traceError(err);}
+                  redis.hset(imageid, 'url', uploadRoot + filename, console.ifError);
+              });
+          })
       })
   })
 

@@ -1,9 +1,36 @@
 var appko = {};
 (function(){
-    var $upload = $('#upload');
-    var $username = $('#username');
+
+    function loadPkImages() {
+      $('.pk-image').each(loadPkImage);
+    }
+
+    function loadPkImage(i, pkImage) {
+      var $img = $(pkImage).find('img');
+      var url = $img.data('url');
+      $img.attr('src', url).load(function() {
+          $img.unbind('load error')
+      }).error(function() {
+          $img.unbind('load error')
+          reloadPkImage($img);
+      })
+    }
+
+    function reloadPkImage($img) {
+      $img.attr('src', '/' + $img.data('id') + '/remove')
+      .error(function(){
+          $img.unbind('load error')
+          removeImage($img);
+      })
+    }
+
+    function removeImage($img) {
+      location.href = '/' + $img.data('id') + '/remove';
+    }
 
     function initTriggers() {
+      var $upload = $('#upload');
+      var $username = $('#username');
 
       $upload.popover({
           trigger: 'manual'
@@ -41,5 +68,6 @@ var appko = {};
 
     // main
     initTriggers();
+    loadPkImages();
 
 })();
