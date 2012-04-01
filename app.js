@@ -7,9 +7,12 @@ var express = require('express')
   , routes = require('./routes')
   , util = require('util')
   , myconsole = require('myconsole')
+  , config = require('./config')
   , RedisStore = require('connect-redis')(express);
 
 var app = module.exports = express.createServer();
+
+var development = app.settings.env == 'development'
 
 // Configuration
 
@@ -25,7 +28,9 @@ app.configure(function(){
   // app.use(express.static(__dirname + '/public'));
 });
 
-app.get('/assets/*', express.compiler({ src: __dirname + '/public', enable: ['less'] }));
+// app.get('/assets/*', express.compiler({ src: __dirname + '/public', enable: ['less'] }));
+// use connect-less for @import
+app.get('/assets/*', require('connect-less')({ src: __dirname + '/public/', compress: !development }));
 
 app.get('/assets/*', express.static(__dirname + '/public'));
 
@@ -40,6 +45,7 @@ app.configure('production', function(){
 app.locals({
     title: 'HD-images'
   , debug: app.settings.env == 'development'
+  , config: config
 });
 
 app.dynamicHelpers({

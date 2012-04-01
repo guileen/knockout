@@ -10,15 +10,11 @@ a {
   max-height: 128px;
   display: inline-block;
 }
-#left-image {
+.pk-image {
   width: 48%;
   max-width: 48%;
-  display: inline-block;
-}
-#right-image {
-  width: 48%;
-  max-width: 48%;
-  display: inline-block;
+  display: block;
+  float: left;
 }
 .inline {
   display: inline-block;
