@@ -1,0 +1,7 @@
+a.imgfoo(href='#')
+  img.thumbnail.thumbnail-small(src=img.src)
+  if(img.width<400 || img.height<400)
+    i.icon-ban-circle
+  else
+    i.icon-ok
+  span #{img.width} x #{img.height}

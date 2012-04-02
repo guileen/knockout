@@ -1,0 +1,30 @@
+.imgko-container
+  // #myModal.modal.fade.hide
+  //   .modal-header
+  //     h1 ffff
+  //     a.close(data-dismiss='modal')x
+  //   .modal-body
+  //     p on fine body
+  //   .modal-footer
+  //     a.btn.btn-primary 采集
+
+  #imgko-main-dialog.modal.hide.fade
+    .modal-header
+      .close(data-dismiss="modal") &times;
+      h3 采集图片
+    .modal-body
+
+      h4 Text in a modal
+      .ko-stage
+      p Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem.
+
+      <hr>
+
+      h4 Overflowing text to show optional scrollbar
+      p We set a fixed <code>max-height</code> on the <code>.modal-body</code>. Watch it overflow with all this extra lorem ipsum text we've included.
+    .modal-footer
+      .row
+        textarea #{title}
+      a.btn.dropdown() 全选 全不选
+      a.btn.btn-danger(href="#", data-dismiss="modal") Close
+      a.btn.btn-primary(href="#") Save changes

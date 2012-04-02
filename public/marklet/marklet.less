@@ -1,6 +1,11 @@
 // Core variables and mixins
 @import "../bootstrap/less/variables.less"; // Modify this for custom colors, font-sizes, etc
 @import "../bootstrap/less/mixins.less";
+
+// fix icon path
+@iconSpritePath:          "../bootstrap/img/glyphicons-halflings.png";
+@iconWhiteSpritePath:     "../bootstrap/img/glyphicons-halflings-white.png";
+
 .imgko-container {
 /*!
  * Bootstrap v2.0.2
@@ -15,6 +20,7 @@
 // CSS Reset
 @import "../bootstrap/less/reset.less";
 
+// RESET classes prevent out-site defined
 .fade,
 .in,
 .modal,
@@ -72,6 +78,23 @@
 
 // Utility classes
 @import "../bootstrap/less/utilities.less"; // Has to be last to override when necessary
+
+// THUMBNAIL
+  .thumbnail-small {
+    // max-width: 128px;
+    max-height: 128px;
+    // display: inline-block;
+  }
+
+  a.imgfoo {
+    display: inline-block;
+    &:hover {
+      background-color: rgba(0,0,0,0.5);
+      i {
+        .icon-white();
+      }
+    }
+  }
 
 }
 

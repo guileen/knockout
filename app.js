@@ -19,7 +19,20 @@ var development = app.settings.env == 'development'
 
 // Configuration
 app.configure('development', function() {
+    var fs = require('fs')
+      , exec = require('child_process').exec
+      ;
     app.use(express.logger({ format: ':method :url :status' }));
+    // auto make
+    fs.watch('views/marklet/', function(event, filename) {
+        console.log('event:' + event);
+        console.log('filename:' + filename);
+        exec('make', function(err, stdout, stderr) {
+            console.log(stdout);
+            console.error(stderr);
+            if(error) myconsole.traceError(error);
+        });
+    });
 });
 
 app.configure(function(){
