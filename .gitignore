@@ -1,0 +1,7 @@
+build
+public/upload/
+public/assets/css/marklet.css
+public/assets/css/style.css
+public/assets/js/*.min.js
+public/marklet/marklet.js
+public/marklet/templates.js

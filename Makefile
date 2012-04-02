@@ -1,24 +1,24 @@
 BUILD = $(CURDIR)/build
 DIST = $(CURDIR)/dist
-MARKLET_MODULES = public/assets/js/intro.js \
-				  public/assets/js/marklet-transition.js \
-				  public/assets/js/marklet-modal.js \
+MARKLET_MODULES = public/marklet/intro.js \
+				  public/marklet/bootstrap-transition.js \
+				  public/marklet/bootstrap-modal.js \
 				  public/assets/js/jade.runtime.js \
-				  public/assets/js/marklet-templates.js \
-				  public/assets/js/marklet-main.js \
-				  public/assets/js/outro.js
+				  public/marklet/templates.js \
+				  public/marklet/main.js \
+				  public/marklet/outro.js
 
 MARKLET_VER = 0.1
 
 all:
-	mkdir -p ${BUILD}
-	jade -c -D --out public/assets/js/marklet-templates.js views/marklet/
-	cat ${MARKLET_MODULES} | \
+	@@mkdir -p ${BUILD}
+	@@jade -c -D --out public/marklet/templates.js views/marklet/
+	@@cat ${MARKLET_MODULES} | \
 			sed 's/(function( window ) {//' | \
 			sed 's/}...window..;//' | \
 			sed 's/((1))/1/' | \
 			sed 's/window.jQuery/jQuery/' | \
 			sed 's/@DATE/'"${DATE}"'/' | \
 			sed "s/@VERSION/${MARKLET_VER}/" > build/marklet.js
-	uglifyjs --unsafe build/marklet.js > public/assets/js/marklet.js
+	uglifyjs --unsafe build/marklet.js > public/marklet/marklet.js
 

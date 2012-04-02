@@ -37,7 +37,7 @@ app.configure(function(){
 
 // app.get('/assets/*', express.compiler({ src: __dirname + '/public', enable: ['less'] }));
 // use connect-less for @import
-app.get('/assets/*', require('connect-less')({ src: __dirname + '/public/', compress: !development }));
+app.get('/*', require('connect-less')({ src: __dirname + '/public/', compress: !development }));
 
 app.get('/*', express.static(__dirname + '/public'));
 
