@@ -1,19 +1,9 @@
 (function( window ) {
+var html = marklet_template();
+$(html).appendTo(document.body);
 
-var html = template.render();
-$(img).each(function(){
-
-});
-container.append($(html));
-
-// bootstrap-modal
-/* {bootstrap-modal-js} */
-
-// bootstrap-tooltip
-/* {bootstrap-tooltip-js } */
-
-// bootstrap-popover
-/* {bootstrap-popover} */
-
-// ---
+window.__IMGKO_MAIN__ = function() {
+  $('#imgko-main-dialog').modal();
+}
+__IMGKO_MAIN__();
 })( window );

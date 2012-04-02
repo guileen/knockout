@@ -11,4 +11,4 @@
 var document = window.document,
 	navigator = window.navigator,
 	location = window.location;
-var $ = jQuery = window.jQuery.noConfilct();
+var $ = jQuery = window.jQuery.noConflict();
