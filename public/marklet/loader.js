@@ -3,7 +3,6 @@
 if (window.__IMGKO_LOADED__) return;
 window.__IMGKO_LOADED__ = true;
 // -----#end define-----
-
 if (!checkJQuery()) {
   loadjs('http://code.jquery.com/jquery-1.7.2.min.js');
 }
