@@ -44,7 +44,7 @@
 
         if (this.isShown) return
 
-        $('body').addClass('modal-open')
+        $('body').addClass('imgko-modal-open')
 
         this.isShown = true
         this.$element.trigger('show')
@@ -79,7 +79,7 @@
         var that = this
         this.isShown = false
 
-        $('body').removeClass('modal-open')
+        $('body').removeClass('imgko-modal-open')
 
         escape.call(this)
 
@@ -126,7 +126,7 @@
     if (this.isShown && this.options.backdrop) {
       var doAnimate = $.support.transition && animate
 
-      this.$backdrop = $('<div class="imgko-container modal-backdrop ' + animate + '" />')
+      this.$backdrop = $('<div class="imgko-modal-backdrop ' + animate + '" />')
         .appendTo(document.body)
 
       if (this.options.backdrop != 'static') {

@@ -1,3 +1,6 @@
+// Core variables and mixins
+@import "../../bootstrap/less/variables.less"; // Modify this for custom colors, font-sizes, etc
+@import "../../bootstrap/less/mixins.less";
 .imgko-container {
 /*!
  * Bootstrap v2.0.2
@@ -12,9 +15,6 @@
 // CSS Reset
 @import "../../bootstrap/less/reset.less";
 
-// Core variables and mixins
-@import "../../bootstrap/less/variables.less"; // Modify this for custom colors, font-sizes, etc
-@import "../../bootstrap/less/mixins.less";
 
 // Grid system and page structure
 @import "../../bootstrap/less/scaffolding.less";
@@ -64,3 +64,43 @@
 @import "../../bootstrap/less/utilities.less"; // Has to be last to override when necessary
 
 }
+
+// bootstrap/modal.less
+// bootstrap/component-animations.less
+
+// MODALS
+// ------
+
+// Recalculate z-index where appropriate
+.imgko-modal-open {
+  .dropdown-menu {  z-index: @zindexDropdown + @zindexModal; }
+  .dropdown.open { *z-index: @zindexDropdown + @zindexModal; }
+  .popover       {  z-index: @zindexPopover  + @zindexModal; }
+  .tooltip       {  z-index: @zindexTooltip  + @zindexModal; }
+}
+
+// Background
+.imgko-modal-backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: @zindexModalBackdrop;
+  background-color: @black;
+
+  .opacity(80);
+
+// COMPONENT ANIMATIONS
+// --------------------
+  &.fade {
+    .transition(opacity .15s linear);
+    opacity: 0;
+    &.in {
+      // MODALS
+      .opacity(80);
+    }
+  }
+
+}
+
