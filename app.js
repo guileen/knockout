@@ -39,7 +39,7 @@ app.configure(function(){
 // use connect-less for @import
 app.get('/assets/*', require('connect-less')({ src: __dirname + '/public/', compress: !development }));
 
-app.get('/assets/*', express.static(__dirname + '/public'));
+app.get('/*', express.static(__dirname + '/public'));
 
 app.configure('development', function(){
   // app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
