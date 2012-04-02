@@ -26,7 +26,12 @@ html(lang='en')
 
     // marklet modified bootstrap
     script(src='/marklet/bootstrap-transition.js')
+    script(src='/marklet/bootstrap-tooltip.js')
+    script(src='/marklet/bootstrap-popover.js')
     script(src='/marklet/bootstrap-modal.js')
     script(src='/assets/js/jade.runtime.js')
     script(src='/marklet/template.js')
     script(src='/marklet/main.js')
+    script
+      $('.tooltip-test').tooltip()
+      $('.popover-test').popover()
