@@ -146,7 +146,7 @@ var exports = module.exports = function(app) {
           crawler.on('end', function() {
               fs.rename(tempFilename, realFilename, function(err) {
                   if(err) {return console.traceError(err);}
-                  redis.hset(imageid, 'url', uploadRoot + filename, console.ifError);
+                  redis.hset(imageid, 'url', config.uploadRoot + filename, console.ifError);
               });
           })
       })

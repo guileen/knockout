@@ -18,11 +18,7 @@ MARKLET_VER = 0.1
 
 all:
 	@@mkdir -p ${BUILD}
-	# @@jade -c -D --out ${BUILD_TEMPLATE} views/marklet/
-	# @@cat ${BUILD_TEMPLATE} | \
-	# 		sed 's/jade.templates...marklet.jade../var marklet_template/' | \
-	# 		sed 's/@DATE/'"${DATE}"'/' > ${TEMPLATE}
-	jade -c -D --out ${STAGE_TEMPLATE} --var stage_template views/marklet/stage.jade
+	@@jade -c -D --out ${STAGE_TEMPLATE} --var stage_template views/marklet/stage.jade
 	@@jade -c -D --out ${TB_TEMPLATE} --var tb_template views/marklet/tb.jade
 	@@cat ${MARKLET_MODULES} | \
 			sed 's/(function( window ) {//' | \
@@ -31,5 +27,5 @@ all:
 			sed 's/window.jQuery/jQuery/' | \
 			sed 's/@DATE/'"${DATE}"'/' | \
 			sed "s/@VERSION/${MARKLET_VER}/" > ${MARKLET_JS}
-	uglifyjs --unsafe ${MARKLET_JS} > public/marklet/marklet.min.js
-
+	@@uglifyjs --unsafe ${MARKLET_JS} > public/marklet/marklet.min.js
+	@@echo make done.

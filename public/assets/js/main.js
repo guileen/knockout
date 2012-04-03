@@ -24,7 +24,7 @@ var appko = {};
     }
 
     function reloadPkImage($img) {
-      $img.attr('src', '/' + $img.data('id') + '/remove')
+      $img.attr('src', '/' + $img.data('id') + '/reload')
       .error(function(){
           $img.unbind('load error')
           removeImage($img);
