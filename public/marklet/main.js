@@ -53,10 +53,11 @@ function loadPageLinks() {
         $wrap = null;
       }
 
-      var text = $.trim($link.text())
-        || $.trim($link.attr('title'))
-        || $.trim($img.attr('title'))
-        || ($wrap && $wrap.text())
+      var text = midTrim($link.text())
+        || midTrim($link.attr('title'))
+        || midTrim($img.attr('title'))
+        || midTrim($wrap && $wrap.text())
+        || midTrim(href, 15, 10);
         ;
 
       var width = $img.width();
@@ -79,6 +80,26 @@ function loadPageLinks() {
 
       });
   });
+}
+
+function midTrim(text, nleft, nright) {
+  if(!text) return;
+  var text = $.trim(text).replace(/https?:\/\/(www.)?/, '');
+  if(nleft == undefined) {
+    nleft = 4;
+  }
+  if(nright == undefined) {
+    nright = 4;
+  }
+  max = nleft + nright + 2;
+  if(text.length < max) return text;
+  console.log(text);
+  var nleft = nright = max/2 - 2;
+  var left = text.substring(0, nleft);
+  var right = text.substring(text.length - nright);
+  console.log(left);
+  console.log(right);
+  return left + '...' + right;
 }
 
 window.__IMGKO_MAIN__ = function() {
