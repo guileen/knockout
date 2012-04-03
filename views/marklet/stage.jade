@@ -12,19 +12,30 @@
     .modal-header
       .close(data-dismiss="modal") &times;
       h3 采集图片
+      .btn-group
+        a.btn.dropdown() 全选
+        a.btn 全不选
     .modal-body
+      h4 本页图片
+      .imgs-stage
+      hr
+      h4 链接
+      .links-stage
 
-      h4 Text in a modal
-      .ko-stage
-      p Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem.
 
-      <hr>
+      // h4 Text in a modal
+      // p Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem.
 
-      h4 Overflowing text to show optional scrollbar
-      p We set a fixed <code>max-height</code> on the <code>.modal-body</code>. Watch it overflow with all this extra lorem ipsum text we've included.
+      // <hr>
+
+      // h4 Overflowing text to show optional scrollbar
+      // p We set a fixed <code>max-height</code> on the <code>.modal-body</code>. Watch it overflow with all this extra lorem ipsum text we've included.
     .modal-footer
+      // form
       .row
-        textarea #{title}
-      a.btn.dropdown() 全选 全不选
-      a.btn.btn-danger(href="#", data-dismiss="modal") Close
-      a.btn.btn-primary(href="#") Save changes
+        textarea(name='description') #{title}
+      .btn-toolbar
+        .btn-group
+          a.btn.btn-danger(href="#", data-dismiss="modal") Close
+        .btn-group
+          a.btn.btn-primary(href="#") Save changes

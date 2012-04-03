@@ -9,7 +9,14 @@ var appko = {};
       var $img = $(pkImage).find('img');
       var url = $img.data('url');
       $img.attr('src', url).load(function() {
-          $img.unbind('load error')
+          var t = new Image();
+          t.src = $img.data('url');
+          if(t.width < 300 || t.height < 300) {
+            // != real width real height
+            reloadPkImage($img);
+          }
+          t=null;
+          $img.unbind('load error');
       }).error(function() {
           $img.unbind('load error')
           reloadPkImage($img);
