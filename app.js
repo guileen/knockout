@@ -25,7 +25,7 @@ var development = app.settings.env == 'development'
 app.configure('development', function() {
     app.use(express.logger({ format: ':method :url :status' }));
     // auto make
-    require('./automake');
+    // require('./automake');
 });
 
 app.configure(function(){

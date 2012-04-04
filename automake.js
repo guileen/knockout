@@ -4,6 +4,8 @@ var watch = require('watch')
   , myconsole = require('myconsole')
   ;
 
+myconsole.replace();
+
 watch.createMonitor('.', { ignoreDotFiles: true }, function (monitor) {
     monitor.on("created", check_make)
     monitor.on("changed", check_make)
@@ -16,22 +18,27 @@ function check_make(f) {
   match = match && ! /(^\.|.*\/\.).*/.test(f)
   if( ! match ) return;
   console.log(f + ' changed, start make')
-
-  var makeprg = spawn('make')
-
-  makeprg.stdout.on('data', function(data) {
-      console.log(data.toString());
-  });
-
-  makeprg.stderr.on('data', function(data) {
-      console.log(data.toString());
-  });
-
-  makeprg.on('exit', function(code) {
-      console.log('make done ' + code);
+  exec('make', function(error, stdout, stderr) {
+      if(error) myconsole.traceError(error);
+      console.log(stdout);
+      console.error(stderr);
   })
 
-  makeprg.on('error', function(error) {
-      console.traceError(error);
-  })
+  // var makeprg = spawn('make')
+
+  // makeprg.stdout.on('data', function(data) {
+  //     console.log(data.toString());
+  // });
+
+  // makeprg.stderr.on('data', function(data) {
+  //     console.log(data.toString());
+  // });
+
+  // makeprg.on('exit', function(code) {
+  //     console.log('make done ' + code);
+  // })
+
+  // makeprg.on('error', function(error) {
+  //     console.traceError(error);
+  // })
 }
