@@ -48,6 +48,7 @@
 
         this.isShown = true
         this.$element.trigger('show')
+        this.$element.removeClass('hide')
 
         escape.call(this)
         backdrop.call(this, function () {
@@ -65,7 +66,8 @@
           that.$element.addClass('in')
 
           transition ?
-            that.$element.one($.support.transition.end, function () { that.$element.trigger('shown') }) :
+            // that.$element.one($.support.transition.end, function () { that.$element.trigger('shown') }) :
+            callbackWithTransition(that.$element, function() { that.$element.trigger('shown') }) :
             that.$element.trigger('shown')
 
         })
@@ -111,6 +113,16 @@
     })
   }
 
+  // 防止某些页面 transition.end 事件失败
+  function callbackWithTransition($el, callback) {
+    function doCallback() {
+      if (callback)callback();
+      callback = null;
+    }
+    $el.one($.support.transition.end, doCallback)
+    setTimeout(doCallback, 500);
+  }
+
   function hideModal( that ) {
     this.$element
       .hide()
@@ -138,16 +150,17 @@
       this.$backdrop.addClass('in')
 
       doAnimate ?
-        this.$backdrop.one($.support.transition.end, callback) :
+        // this.$backdrop.one($.support.transition.end, callback) :
+        callbackWithTransition(this.$backdrop, callback) :
         callback()
 
     } else if (!this.isShown && this.$backdrop) {
       this.$backdrop.removeClass('in')
 
       $.support.transition && this.$element.hasClass('fade')?
-        this.$backdrop.one($.support.transition.end, $.proxy(removeBackdrop, this)) :
+        // this.$backdrop.one($.support.transition.end, $.proxy(removeBackdrop, this)) :
+        callbackWithTransition(this.$backdrop, $.proxy(removeBackdrop, this)) :
         removeBackdrop.call(this)
-
     } else if (callback) {
       callback()
     }

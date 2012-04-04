@@ -6,12 +6,16 @@
 var express = require('express')
   , routes = require('./routes')
   , util = require('util')
+  , fs = require('fs')
   , myconsole = require('myconsole')
   , config = require('./config')
   , RedisStore = require('connect-redis')(express);
 
 // apply configuration
 myconsole.replace();
+
+fs.mkdir(config.tmpUploadFolder)
+fs.mkdir(config.uploadFoler)
 
 var app = module.exports = express.createServer();
 

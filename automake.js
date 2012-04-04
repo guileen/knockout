@@ -1,22 +1,21 @@
 var watch = require('watch')
   , spawn = require('child_process').spawn
   , exec = require('child_process').exec
+  , myconsole = require('myconsole')
   ;
 
 watch.createMonitor('.', { ignoreDotFiles: true }, function (monitor) {
-    monitor.on("created", function (f, stat) {
-        // Handle file changes
-    })
-    monitor.on("changed", function (f, curr, prev) {
-        if(f == 'Makefile' || /\.jade$/.test(f)) make();
-    })
-    monitor.on("removed", function (f, stat) {
-        // Handle removed files
-    })
+    monitor.on("created", check_make)
+    monitor.on("changed", check_make)
+    monitor.on("removed", check_make)
 });
 
-function make() {
-  console.log('start make')
+function check_make(f) {
+  var match = f == 'Makefile' || /\.jade$/.test(f) || /public\/marklet\/.*\.js/.test(f);
+  match = match && ! /.*\/(marklet|.*template)(.min)?.js$/.test(f)
+  match = match && ! /(^\.|.*\/\.).*/.test(f)
+  if( ! match ) return;
+  console.log(f + ' changed, start make')
 
   var makeprg = spawn('make')
 
@@ -30,5 +29,9 @@ function make() {
 
   makeprg.on('exit', function(code) {
       console.log('make done ' + code);
+  })
+
+  makeprg.on('error', function(error) {
+      console.traceError(error);
   })
 }

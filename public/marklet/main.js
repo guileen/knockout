@@ -17,6 +17,7 @@ function loadPageImages() {
       var $img = $(img);
       var t = new Image();
       var src = t.src = $img.attr('src');
+      // width = img.natureWidth; // is not works on IE
       var width = t.width;
       var height = t.height;
       t = null;
@@ -43,8 +44,13 @@ function loadPageLinks() {
       var $img = $(img);
       var $link = $img.parent('a');
 
+      var src = $img.attr('src');
       var href = $link.attr('href');
-      if(href.indexOf('#') == 0 || href.indexOf('javascript') == 0) return;
+
+      var width = $img.width();
+      var height = $img.height();
+
+      if(width < 50 || height < 50 || href.indexOf('#') == 0 || href == src || href.indexOf('javascript') == 0) return;
       if(links_cache[href]) return;
       links_cache[href] = $link;
 
@@ -60,12 +66,10 @@ function loadPageLinks() {
         || midTrim(href, 15, 10);
         ;
 
-      var width = $img.width();
-      var height = $img.height();
 
       var tb = tb_template({
           img: {
-            src: $img.attr('src')
+            src: src
           , width: $img.width() 
           , height: $img.height()
           }
@@ -93,12 +97,9 @@ function midTrim(text, nleft, nright) {
   }
   max = nleft + nright + 2;
   if(text.length < max) return text;
-  console.log(text);
   var nleft = nright = max/2 - 2;
   var left = text.substring(0, nleft);
   var right = text.substring(text.length - nright);
-  console.log(left);
-  console.log(right);
   return left + '...' + right;
 }
 
@@ -109,4 +110,5 @@ window.__IMGKO_MAIN__ = function() {
 }
 __IMGKO_MAIN__();
 
+window.__IMGKO_LOADED__ = true;
 })( window );
