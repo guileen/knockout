@@ -4,16 +4,20 @@ html
     title= title
     if(debug)
       link(rel='stylesheet', href='/bootstrap/docs/assets/css/bootstrap.css')
-      script(src='/assets/js/jquery-1.7.1.min.js')
-      script(src='/bootstrap/js/bootstrap-tooltip.js')
-      script(src='/bootstrap/js/bootstrap-popover.js')
     else
       link(rel='stylesheet', href='http://twitter.github.com/bootstrap/assets/css/bootstrap.css')
-      script(src='http://code.jquery.com/jquery-1.7.2.min.js')
-      script(src='http://twitter.github.com/bootstrap/assets/js/bootstrap-tooltip.js')
-      script(src='http://twitter.github.com/bootstrap/assets/js/bootstrap-popover.js')
     link(rel='stylesheet', href='/assets/css/style.css')
   body
     .container
       block content
+
+    script(src='/assets/js/async.min.js')
+    if(debug)
+      script(src='/assets/js/jquery-1.7.1.min.js')
+      script(src='/bootstrap/js/bootstrap-tooltip.js')
+      script(src='/bootstrap/js/bootstrap-popover.js')
+    else
+      script(src='http://code.jquery.com/jquery-1.7.2.min.js')
+      script(src='http://twitter.github.com/bootstrap/assets/js/bootstrap-tooltip.js')
+      script(src='http://twitter.github.com/bootstrap/assets/js/bootstrap-popover.js')
     block scripts

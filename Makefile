@@ -27,5 +27,5 @@ all:
 			sed 's/window.jQuery/jQuery/' | \
 			sed 's/@DATE/'"${DATE}"'/' | \
 			sed "s/@VERSION/${MARKLET_VER}/" > ${MARKLET_JS}
-	@@uglifyjs --unsafe ${MARKLET_JS} > public/marklet/marklet.min.js
+	uglifyjs --unsafe ${MARKLET_JS} > public/marklet/marklet.min.js
 	@@echo make done.

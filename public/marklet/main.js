@@ -67,6 +67,7 @@ function loadPageImages() {
           , height: height
           }
       });
+
       var $tb = $(tb);
       $tb.appendTo($imgs_stage);
       $tb.live('click', function() {

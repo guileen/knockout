@@ -1,34 +1,88 @@
 var appko = {};
 (function(){
 
-    function loadPkImages() {
-      $('.pk-image').each(loadPkImage);
+    // simple template
+    function render(html, ctx) {
+      for(var name in ctx) {
+        var re = new RegExp('{' + name + '}', 'g');
+        html = html.replace(re, ctx[name]);
+      }
+      return html;
     }
 
-    function loadPkImage(i, pkImage) {
-      var $img = $(pkImage).find('img');
+    var html_pk_image = $('#pk-image').html()
+      , html_tb_image = $('#tb-image').html();
+
+    $.get('/api/pkimages', function(data) {
+        var pkImages = data.pkImages
+          , hotImages = data.hotImages
+          ;
+        if(data.foundPair) {
+          async.forEach(pkImages, loadPkImage, function(err){
+              loadHotImages(hotImages);
+          })
+        }
+
+    })
+
+    function loadHotImages(images, callback) {
+
+        var $inspos = $('i.insert-pos')
+        var $winspos = $('i.winsert-pos')
+
+        async.forEachLimit(images, 4, function(image, _callback) {
+            var $tb_html = $(render(html_tb_image, image));
+            var $img = $tb_html.find('img');
+            $img.attr('src', image.tbUrl).load(function(){
+                var $pos = (image.tbWidth > 130 && image.width > image.height) ? $winspos : $inspos;
+                var minpos = $pos[0]
+                $pos.each(function(){
+                    if($(this).offset().top < $(minpos).offset().top) {
+                      minpos = this
+                    }
+                })
+
+                $tb_html.insertBefore(minpos);
+                _callback();
+            })
+
+        }, callback)
+    }
+
+    var imgpk_pos = 0;
+    function loadPkImage(image, callback) {
+      var $pkImage = $(render(html_pk_image, image));
+      var $img = $pkImage.find('img');
       var url = $img.data('url');
       $img.attr('src', url).load(function() {
+          var $imgpk_pos = '.imgpk-pos-' + imgpk_pos % 2;
+          console.log($imgpk_pos)
+          $pkImage.insertBefore($('.imgpk-pos-' + imgpk_pos % 2));
+          imgpk_pos ++;
+          t=null;
+          callback()
+
           var t = new Image();
           t.src = $img.data('url');
           if(t.width < 300 || t.height < 300) {
             // != real width real height
             reloadPkImage($img);
           }
-          t=null;
-          $img.unbind('load error');
+
+          $img.unbind('load');
       }).error(function() {
-          $img.unbind('load error')
-          reloadPkImage($img);
+          $img.unbind('error')
+          reloadPkImage($img, callback);
       })
     }
 
-    function reloadPkImage($img) {
+    function reloadPkImage($img, callback) {
+      console.log('reload:' + $img.data('url'))
       $img.attr('src', '/' + $img.data('id') + '/reload')
       .error(function(){
           $img.unbind('load error')
           removeImage($img);
-      })
+      }).load(callback)
     }
 
     function removeImage($img) {
@@ -75,6 +129,6 @@ var appko = {};
 
     // main
     initTriggers();
-    loadPkImages();
+    // loadPkImages();
 
 })();

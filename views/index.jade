@@ -22,24 +22,19 @@ block content
         input.input-small(name='username', placeholder=username)
         button.btn.btn-primary(type='submit') Login
 
-  if(locals.foundPair)
-    .ko-stage
-      each image, i in pkImages
-        .pk-image(class='pk-image-#{i}')
-
-          a.btn(href="/#{image.id}/remove")
-            i.icon-trash
-            | Delete
-          .thumbnail
-            a(href="/#{image.id}/ko/#{joinImageId(pkImages, image)}")
-              img(data-id=image.id, data-url=image.url)
-
-  #top-images
-    if(locals.hotImages)
-      each image in hotImages
-        span
-          //- TODO thumbnail it
-          img.thumbnail.thumbnail-small(src=image.tbUrl)
+  .row
+    for id in [0, 1]
+      .span6
+        i(class='imgpk-pos-#{id}')
+        .row
+          for i in [0, 1, 2]
+            .span2
+              i.winsert-pos
+              .row
+                .span1
+                  i.insert-pos
+                .span1
+                  i.insert-pos
 
 block scripts
   script#upload-content(type="template")
@@ -54,4 +49,15 @@ block scripts
       button.btn(type='submit') switch user
     a.btn.btn-danger.close-popover close
 
+  script#pk-image(type='template')
+    a.btn(href="/{id}/remove")
+      i.icon-trash
+      | Delete
+    .thumbnail
+      a(href="/{id}/ko/{others}")
+        img(data-id='{id}', data-url='{url}')
+
+  script#tb-image(type='template')
+    a(href='#').tb-small
+      img.thumbnail//(src='{tbUrl}')
   script(src='/assets/js/main.js')

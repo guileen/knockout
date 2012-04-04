@@ -4,7 +4,6 @@
  */
 
 var express = require('express')
-  , routes = require('./routes')
   , util = require('util')
   , fs = require('fs')
   , myconsole = require('myconsole')
@@ -73,7 +72,8 @@ app.use(function(err, req, res, next) {
 
 // Routes
 
-routes(app);
+require('./routes')(app);
+require('./routes/api')(app);
 
 app.listen(3000);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);

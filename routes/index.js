@@ -34,6 +34,11 @@ var exports = module.exports = function(app) {
               .smembers(imageid + ':KOby')
               .exec(function(err, data) {
                   if(err) {return _callback(err);}
+                  if(!data[0]) {
+                    console.log(imageid + ' can not load')
+                    console.log(data)
+                    return _callback(null)
+                  }
                   var image = data[0]
                     , ko = image.ko = data[1]
                     , koby = image.koby = data[2]
@@ -46,6 +51,8 @@ var exports = module.exports = function(app) {
 
             var foundPair = false;
             var imagei, imagej;
+
+            images = images.filter(function(image) { return image })
 
             // sort by vote count to compare images never compared
             var sortImages = images.filter(function(image) { return image.sort < 2 });
@@ -133,7 +140,7 @@ var exports = module.exports = function(app) {
 
       redis.hget(imageid, 'url', function(err, url) {
           if(err) {return next(err);}
-          console.log(url);
+          if(!url) return next(imageid + ' not found');
           var crawler = request({url: url, headers : {
                 Referer: url
           }});
