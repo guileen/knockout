@@ -20,8 +20,8 @@ function check_make(f) {
   console.log(f + ' changed, start make')
   exec('make', function(error, stdout, stderr) {
       if(error) myconsole.traceError(error);
-      console.log(stdout);
-      console.error(stderr);
+      if(stdout) console.log(stdout);
+      if(stderr) console.error(stderr);
   })
 
   // var makeprg = spawn('make')
