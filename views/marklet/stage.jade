@@ -33,9 +33,9 @@
     .modal-footer
       // form
       .row
-        textarea(name='description') #{title}
+        textarea.description(name='description') #{title}
       .btn-toolbar
         .btn-group
           a.btn.btn-danger(href="#", data-dismiss="modal") Close
         .btn-group
-          a.btn.btn-primary(href="#") Save changes
+          a.submit.btn.btn-primary(href="#", data-dismiss='modal') Save changes

@@ -1,5 +1,6 @@
 BUILD = $(CURDIR)/build
 DIST = $(CURDIR)/dist
+BASE_URL = http:\/\/dev:3000\/
 STAGE_TEMPLATE = public/marklet/stage_template.js
 TB_TEMPLATE = public/marklet/tb_template.js
 MARKLET_MODULES = public/marklet/intro.js \
@@ -26,6 +27,7 @@ all:
 			sed 's/((1))/1/' | \
 			sed 's/window.jQuery/jQuery/' | \
 			sed 's/@DATE/'"${DATE}"'/' | \
+			sed 's/@BASE_URL/'"${BASE_URL}"'/' | \
 			sed "s/@VERSION/${MARKLET_VER}/" > ${MARKLET_JS}
 	uglifyjs --unsafe ${MARKLET_JS} > public/marklet/marklet.min.js
 	@@echo make done.

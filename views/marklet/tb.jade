@@ -1,14 +1,12 @@
 a.imgfoo(href='#')
   img.thumbnail.thumbnail-small(src=img.src)
+
+  if(banned)
+    i.select.icon-ban-circle
+  else
+    i.select.icon-ok
+
   if(locals.link)
-    if(img.width<50 || img.height<50 || ! link.text)
-      i.icon-ban-circle
-    else
-      i.icon-ok
     span #{link.text || link.href}
   else
-    if(img.width<400 || img.height<400)
-      i.icon-ban-circle
-    else
-      i.icon-ok
     span #{img.width} x #{img.height}

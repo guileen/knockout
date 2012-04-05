@@ -48,6 +48,11 @@ var $links_stage = $container.find('.links-stage');
 var imgs_cache = {};
 var links_cache = {};
 
+var postData = {
+  pageImages : {}
+, linkImages : {}
+};
+
 function loadPageImages() {
   $('img,embed').each(function(i, img) {
       var $img = $(img);
@@ -59,6 +64,7 @@ function loadPageImages() {
       t = null;
       if(width < 300 || height < 300 || imgs_cache[src]) return;
       imgs_cache[src] = $img;
+      var banned = width < 400 || height < 400;
 
       var tb = tb_template({
           img: {
@@ -66,12 +72,28 @@ function loadPageImages() {
           , width: width
           , height: height
           }
+        , banned: banned
       });
 
       var $tb = $(tb);
+      var $select = $tb.find('i.select');
       $tb.appendTo($imgs_stage);
-      $tb.live('click', function() {
 
+      // TODO simple this
+      postData.pageImages[src] = {
+        text: ''//TODO text
+      }
+      $tb.on('click', function() {
+          $select.toggleClass('icon-ban-circle');
+          $select.toggleClass('icon-ok');
+          banned == !banned;
+          if(banned) {
+            delete postData.pageImages[src]
+          } else {
+            postData.pageImages[src] = {
+              text: ''//TODO text
+            }
+          }
       });
   });
 }
@@ -113,27 +135,50 @@ function loadPageLinks() {
         || midTrim($wrap && $wrap.text())
         || midTrim(href, 15, 10);
         ;
-
+      var banned = width < 50 || height < 50 || ! text;
 
       var tb = tb_template({
           img: {
             src: src
-          , width: $img.width() 
-          , height: $img.height()
+          , width: width
+          , height: height
           }
         , link: {
             href: href
           , text: text
           }
+        , banned: banned
       });
       var $tb = $(tb);
+      var $select = $tb.find('i.select');
       $tb.appendTo($links_stage);
-      $tb.live('click', function() {
 
+      // FIXME simple this
+      postData.linkImages[href] = {
+        src: src
+      , tbWidth: width
+      , tbHeight: height
+      , text: text
+      }
+      $tb.on('click', function() {
+          $select.toggleClass('icon-ban-circle');
+          $select.toggleClass('icon-ok');
+          banned = !banned;
+          if(banned) {
+            delete postData.linkImages[href]
+          } else {
+            postData.linkImages[href] = {
+              src: src
+            , tbWidth: width
+            , tbHeight: height
+            , text: text
+            }
+          }
       });
   });
 }
 
+// trim text from middle
 function midTrim(text, nleft, nright) {
   if(!text) return;
   var text = $.trim(text).replace(/https?:\/\/(www.)?/, '');
@@ -150,6 +195,25 @@ function midTrim(text, nleft, nright) {
   var right = text.substring(text.length - nright);
   return left + '...' + right;
 }
+
+var $textarea = $container.find('textarea.description');
+$container.find('a.submit').on('click', function() {
+    var text = $textarea.val();
+    console.log(text);
+    var data = {
+      text : text
+    , link : location.href
+    , ua : $.browser
+    , pageImages: JSON.stringify(postData.pageImages)
+    , linkImages: JSON.stringify(postData.linkImages)
+    }
+    $.ajax({
+        url: '@BASE_URL/marklet/share'
+      , data: data
+      , dataType: 'jsonp'
+    });
+    $('#imgko-main-dialog').modal('hide');
+})
 
 window.__IMGKO_MAIN__ = function() {
   $('#imgko-main-dialog').modal();
