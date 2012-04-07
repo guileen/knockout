@@ -31,9 +31,10 @@ var appko = {};
         var $winspos = $('i.winsert-pos')
 
         async.forEachLimit(images, 4, function(image, _callback) {
-            var $tb_html = $(render(html_tb_image, image));
+            var html = render(html_tb_image, image)
+            var $tb_html = $(html);
             var $img = $tb_html.find('img');
-            $img.attr('src', image.tbUrl).load(function(){
+            $img.attr('src', image.tbUrl || image.url).load(function(){
                 var $pos = (image.tbWidth > 130 && image.width > image.height) ? $winspos : $inspos;
                 var minpos = $pos[0]
                 $pos.each(function(){
@@ -54,26 +55,31 @@ var appko = {};
       var $pkImage = $(render(html_pk_image, image));
       var $img = $pkImage.find('img');
       var url = $img.data('url');
-      $img.attr('src', url).load(function() {
-          var $imgpk_pos = '.imgpk-pos-' + imgpk_pos % 2;
-          console.log($imgpk_pos)
-          $pkImage.insertBefore($('.imgpk-pos-' + imgpk_pos % 2));
-          imgpk_pos ++;
-          t=null;
-          callback()
 
-          var t = new Image();
-          t.src = $img.data('url');
-          if(t.width < 300 || t.height < 300) {
-            // != real width real height
-            reloadPkImage($img);
-          }
+      function load() {
+        $img.unbind('load', load);
 
-          $img.unbind('load');
-      }).error(function() {
+        var $imgpk_pos = '.imgpk-pos-' + imgpk_pos % 2;
+        $pkImage.insertBefore($('.imgpk-pos-' + imgpk_pos % 2));
+        imgpk_pos ++;
+        t=null;
+        callback()
+
+        var t = new Image();
+        t.src = $img.data('url');
+        if(t.width < 300 || t.height < 300) {
+          // != real width real height
+          reloadPkImage($img);
+        }
+      }
+
+      function error(err) {
           $img.unbind('error')
           reloadPkImage($img, callback);
-      })
+      }
+
+      $img.attr('src', url).bind('load', load);
+      $img.bind('error', error);
     }
 
     function reloadPkImage($img, callback) {
@@ -83,7 +89,9 @@ var appko = {};
       .error(function(){
           $img.unbind('load error')
           removeImage($img);
-      }).load(callback)
+      }).load(function(event){
+          callback()
+      })
     }
 
     function removeImage($img) {
