@@ -928,10 +928,10 @@ function loadPageImages() {
           delete postData.pageImages[src];
         } else {
           postData.pageImages[src] = {
-            url: url
+            url: src
           , width: width
           , height: height
-          , text: $img.attr('title') || ''
+          , text: $img.attr('title') || $img.attr('alt')
           }
         }
       }
@@ -949,6 +949,8 @@ function loadPageImages() {
 function loadPageLinks() {
   $('a img').each(function(i, img) {
       var $img = $(img);
+      console.log($img.parents('.imgko-container'));
+      if($img.parents('.imgko-container').length) return;
       var width = $img.width();
       var height = $img.height();
       if(width < 50 || height < 50) return;
@@ -1055,18 +1057,18 @@ $container.find('a.submit').on('click', function() {
     var pageImages = []
       , linkImages = []
       ;
-    for(var name in pageImages) {
-      pageImages.push(pageImages[name])
+    for(var name in postData.pageImages) {
+      pageImages.push(postData.pageImages[name])
     }
-    for(var name in linkImages) {
-      linkImages.push(linkImages[name])
+    for(var name in postData.linkImages) {
+      linkImages.push(postData.linkImages[name])
     }
     var data = {
-      meta : {
-        text : text
-      , link : location.href
-      , ua : $.browser
-      }
+      meta : JSON.stringify({
+          text : text
+        , link : location.href
+        , ua : $.browser
+      })
     , pageImages: JSON.stringify(pageImages)
     , linkImages: JSON.stringify(linkImages)
     }

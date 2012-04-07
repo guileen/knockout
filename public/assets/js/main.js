@@ -78,7 +78,8 @@ var appko = {};
 
     function reloadPkImage($img, callback) {
       console.log('reload:' + $img.data('url'))
-      $img.attr('src', '/' + $img.data('id') + '/reload')
+      var newsrc = $img.data('newurl') || ( '/' + $img.data('id') + '/reload');
+      $img.attr('src', newsrc)
       .error(function(){
           $img.unbind('load error')
           removeImage($img);

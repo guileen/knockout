@@ -6,11 +6,16 @@
 var config = require('./config')
   , redis = require('redis')
   , fs = require('fs')
+  , request = require('request')
 
 fs.mkdir(config.tmpUploadFolder)
 fs.mkdir(config.uploadFoler)
 
 config.redisClient = redis.createClient(config.redis.port, config.redis.host)
+
+request.defaults({
+    timeout: config.botTimeout
+})
 
 var express = require('express')
   , util = require('util')
@@ -34,7 +39,7 @@ app.configure('development', function() {
 app.configure(function(){
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
-  app.set('view options', {pretty: development, layout: false});
+  app.set('view options', {pretty: development, layout: false, compileDebug: false});
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(express.cookieParser());

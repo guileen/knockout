@@ -83,24 +83,35 @@ function loadPageImages() {
       postData.pageImages[src] = {
         text: ''//TODO text
       }
+
+      function updateImage(banned) {
+        if(banned) {
+          delete postData.pageImages[src];
+        } else {
+          postData.pageImages[src] = {
+            url: src
+          , width: width
+          , height: height
+          , text: $img.attr('title') || $img.attr('alt')
+          }
+        }
+      }
       $tb.on('click', function() {
           $select.toggleClass('icon-ban-circle');
           $select.toggleClass('icon-ok');
           banned == !banned;
-          if(banned) {
-            delete postData.pageImages[src]
-          } else {
-            postData.pageImages[src] = {
-              text: ''//TODO text
-            }
-          }
+          updateImage(banned);
       });
+
+      updateImage(banned);
   });
 }
 
 function loadPageLinks() {
   $('a img').each(function(i, img) {
       var $img = $(img);
+      console.log($img.parents('.imgko-container'));
+      if($img.parents('.imgko-container').length) return;
       var width = $img.width();
       var height = $img.height();
       if(width < 50 || height < 50) return;
@@ -155,25 +166,17 @@ function loadPageLinks() {
       var $select = $tb.find('i.select');
       $tb.appendTo($links_stage);
 
-      // FIXME simple this
-      postData.linkImages[href] = {
-        src: src
-      , tbWidth: width
-      , tbHeight: height
-      , tbText: tbText
-      }
-
       function updateLink(banned) {
           if(banned) {
             delete postData.linkImages[href]
           } else {
             postData.linkImages[href] = {
-              src: src
-            , tbLink: href
+              href: href // target
+            , text: text
+            , tbUrl: src
             , tbWidth: width
             , tbHeight: height
             , tbText: tbText
-            , text: text
             }
           }
       }
@@ -212,12 +215,23 @@ $container.find('a.submit').on('click', function() {
     var text = $textarea.val();
     console.log(text);
     // TODO fix for IE length > 2048
+    var pageImages = []
+      , linkImages = []
+      ;
+    for(var name in postData.pageImages) {
+      pageImages.push(postData.pageImages[name])
+    }
+    for(var name in postData.linkImages) {
+      linkImages.push(postData.linkImages[name])
+    }
     var data = {
-      text : text
-    , link : location.href
-    , ua : $.browser
-    , pageImages: JSON.stringify(postData.pageImages)
-    , linkImages: JSON.stringify(postData.linkImages)
+      meta : JSON.stringify({
+          text : text
+        , link : location.href
+        , ua : $.browser
+      })
+    , pageImages: JSON.stringify(pageImages)
+    , linkImages: JSON.stringify(linkImages)
     }
     console.log(data.pageImages.length);
     console.log(data.linkImages.length);

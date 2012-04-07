@@ -27,8 +27,6 @@ var exports = module.exports = function(app) {
   });
 
   app.get('/api/pkimages', function(req, res) {
-
-
       var user = req.session.username
         , user_images = user + ':images'
         ;
@@ -39,10 +37,21 @@ var exports = module.exports = function(app) {
   })
 
   app.get('/jsonp/mark', function(req, res, next) {
-      var postData = req.query;
-      var pageImages = JSON.parse(postData.pageImages);
-      var linkImages = JSON.parse(postData.linkImages);
-      console.log(pageImages)
-      console.log(linkImages)
+      var meta = JSON.parse(req.query.meta);
+      var pageImages = JSON.parse(req.query.pageImages);
+      var linkImages = JSON.parse(req.query.linkImages);
+      var user = req.session.username;
+
+      async.parallel([
+          function(_callback) {
+            service.queueAddImages(user, meta, pageImages, _callback);
+          }
+        , function(_callback) {
+            service.queueAddLinks(user, meta, linkImages, _callback)
+        }]
+      , function(err, data) {
+          if(err) return next(err);
+          res.json(data);
+      })
   })
 }
