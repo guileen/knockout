@@ -1,5 +1,9 @@
 var exports = module.exports = {
   siteRoot : 'http://dev'
+, redis: {
+    host: 'localhost'
+  , port: 6379
+  }
 , uploadRoot : 'http://dev:3000/upload/'
 , uploadFoler : 'public/upload/'
 , tmpUploadFolder : '/tmp/upload/'

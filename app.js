@@ -3,18 +3,22 @@
  * Module dependencies.
  */
 
+var config = require('./config')
+  , redis = require('redis')
+  , fs = require('fs')
+
+fs.mkdir(config.tmpUploadFolder)
+fs.mkdir(config.uploadFoler)
+
+config.redisClient = redis.createClient(config.redis.port, config.redis.host)
+
 var express = require('express')
   , util = require('util')
-  , fs = require('fs')
   , myconsole = require('myconsole')
-  , config = require('./config')
   , RedisStore = require('connect-redis')(express);
 
 // apply configuration
 myconsole.replace();
-
-fs.mkdir(config.tmpUploadFolder)
-fs.mkdir(config.uploadFoler)
 
 var app = module.exports = express.createServer();
 

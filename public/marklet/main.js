@@ -129,12 +129,14 @@ function loadPageLinks() {
         $wrap = null;
       }
 
-      var text = midTrim($link.text())
-        || midTrim($link.attr('title'))
-        || midTrim($img.attr('title'))
-        || midTrim($wrap && $wrap.text())
-        || midTrim(href, 15, 10);
-        ;
+      var text = $.trim($link.text())
+        || $.trim($link.attr('title'))
+        || $.trim($img.attr('title'))
+        || $.trim($wrap && $wrap.text())
+        || $.trim(href, 15, 10);
+
+      var tbText = midTrim(text);
+
       var banned = width < 50 || height < 50 || ! text;
 
       var tb = tb_template({
@@ -145,7 +147,7 @@ function loadPageLinks() {
           }
         , link: {
             href: href
-          , text: text
+          , text:tbText
           }
         , banned: banned
       });
@@ -158,23 +160,32 @@ function loadPageLinks() {
         src: src
       , tbWidth: width
       , tbHeight: height
-      , text: text
+      , tbText: tbText
       }
-      $tb.on('click', function() {
-          $select.toggleClass('icon-ban-circle');
-          $select.toggleClass('icon-ok');
-          banned = !banned;
+
+      function updateLink(banned) {
           if(banned) {
             delete postData.linkImages[href]
           } else {
             postData.linkImages[href] = {
               src: src
+            , tbLink: href
             , tbWidth: width
             , tbHeight: height
+            , tbText: tbText
             , text: text
             }
           }
+      }
+
+      $tb.on('click', function() {
+          $select.toggleClass('icon-ban-circle');
+          $select.toggleClass('icon-ok');
+          banned = !banned;
+          updateLink(banned);
       });
+
+      updateLink(banned);
   });
 }
 
@@ -200,6 +211,7 @@ var $textarea = $container.find('textarea.description');
 $container.find('a.submit').on('click', function() {
     var text = $textarea.val();
     console.log(text);
+    // TODO fix for IE length > 2048
     var data = {
       text : text
     , link : location.href
@@ -207,8 +219,10 @@ $container.find('a.submit').on('click', function() {
     , pageImages: JSON.stringify(postData.pageImages)
     , linkImages: JSON.stringify(postData.linkImages)
     }
+    console.log(data.pageImages.length);
+    console.log(data.linkImages.length);
     $.ajax({
-        url: '@BASE_URL/marklet/share'
+        url: '@BASE_URL/jsonp/mark'
       , data: data
       , dataType: 'jsonp'
     });
