@@ -1,6 +1,6 @@
 BUILD = $(CURDIR)/build
 DIST = $(CURDIR)/dist
-BASE_URL = http:\/\/dev:3000\/
+BASE_URL = http:\/\/dev:3000
 STAGE_TEMPLATE = public/marklet/stage_template.js
 TB_TEMPLATE = public/marklet/tb_template.js
 MARKLET_MODULES = public/marklet/intro.js \
