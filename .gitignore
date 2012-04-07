@@ -2,6 +2,9 @@ build
 public/upload/
 public/assets/css/marklet.css
 public/assets/css/style.css
-public/assets/js/*.min.js
+*.min.js
 public/marklet/marklet.js
 public/marklet/templates.js
+public/marklet/marklet.css
+public/marklet/stage_template.js
+public/marklet/tb_template.js
