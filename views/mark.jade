@@ -6,7 +6,7 @@ block content
       ul.nav.nav-pills
         li(class= pageid == 'main' && 'active'): a(href='/') Knockout
         li(class= pageid == 'pop' && 'active'): a(href='/pop') Popular
-        li(class= pageid == 'favorite' && 'active'): a(href='/mark') Mark
+        li(class= pageid == 'mark' && 'active'): a(href='/mark') Mark
     if(username)
       span current user is 
         a#username(href="javascript:void(0)")= username
@@ -28,18 +28,9 @@ block content
         button.btn.btn-primary(type='submit') Login
 
   .row
-    for id in [0, 1]
-      .span6
-        i(class='imgpk-pos-#{id}')
-        .row
-          for i in [0, 1, 2]
-            .span2
-              i.winsert-pos
-              .row
-                .span1
-                  i.insert-pos
-                .span1
-                  i.insert-pos
+    for i in [0, 1, 2, 3]
+      .span3
+        i.insert-pos
 
 block scripts
   script#upload-content(type="template")
@@ -60,7 +51,7 @@ block scripts
       | Delete
     .thumbnail
       a(href="/{id}/ko/{others}")
-        img.fullwidth(data-id='{id}', data-url='{url}')
+        img(data-id='{id}', data-url='{url}')
 
   script#tb-image(type='template')
     a(href='#').tb-small

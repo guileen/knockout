@@ -12,16 +12,16 @@ a.tb-small {
   margin: 5px 0;
   display: block;
 }
+a.tb-small img {
+  width: 100%;
+}
+img.fullwidth {
+  width: 100%;
+}
 .thumbnail-small {
   max-width: 128px;
   max-height: 128px;
   display: inline-block;
-}
-.pk-image {
-  width: 48%;
-  max-width: 48%;
-  display: block;
-  float: left;
 }
 .inline {
   display: inline-block;

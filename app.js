@@ -72,6 +72,7 @@ app.locals({
     title: 'HD-images'
   , debug: app.settings.env == 'development'
   , config: config
+  , pageid: 'main'
 });
 
 app.dynamicHelpers({

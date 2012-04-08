@@ -26,11 +26,17 @@ var exports = module.exports = function(app) {
 
   });
 
+  app.get('/api/markimages', function(req, res) {
+      var user = req.session.username;
+      service.getMarkImages(user, function(err, data) {
+          if(err) {return next(err);}
+          res.json(data);
+      })
+  })
+
   app.get('/api/pkimages', function(req, res) {
-      var user = req.session.username
-        , user_images = user + ':images'
-        ;
-      service.getPkImages(req.session.username, function(err, data) {
+      var user = req.session.username;
+      service.getPkImages(user, function(err, data) {
           if(err) {return next(err);}
           res.json(data);
       })

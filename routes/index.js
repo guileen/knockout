@@ -15,6 +15,16 @@ var exports = module.exports = function(app) {
       res.render('index');
   });
 
+  app.get('/pop', function(req, res, next) {
+      res.redirect('/mark');
+  })
+
+  app.get('/mark', function(req, res, next) {
+      res.render('mark', {
+          pageid: 'mark'
+      })
+  })
+
   app.post('/login', function(req, res, next) {
       req.session.username = req.body.username
       res.redirect('/');
