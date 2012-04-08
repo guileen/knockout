@@ -29,58 +29,68 @@ var appko = {};
 
       $modal.modal('show');
 
-      $load.load(function(){
-          $mainimg.attr('src', $load.data('url'));
+      function loadBigImage(src, onError) {
 
-          $loading.hide();
+        $load.load(function(){
+            $mainimg.attr('src', src);
 
-          var originW = $load.width()
-            , originH = $load.height()
-            , width = originW
-            , height = originH
-            ;
+            $loading.hide();
 
-          var hpaddings = 150;
-
-          var maxHeight = screenHeight - hpaddings;
-
-          if(height > maxHeight) {
-            width = width * maxHeight / height
-            height = maxHeight;
-          }
-
-          function resizeModal() {
-
-            var w = isMax ? originW * 1.5 : width
-              , h = isMax ? originH * 1.5 : height
+            var originW = $load.width()
+              , originH = $load.height()
+              , width = originW
+              , height = originH
               ;
 
-            h = Math.min(h, maxHeight);
+            var hpaddings = 150;
 
-            $modal.css({
-                left: baseLeft + (screenWidth - w) / 2
-              , top: baseTop + (screenHeight - h - hpaddings) / 2
-              , width: w + 30
+            var maxHeight = screenHeight - hpaddings;
+
+            if(height > maxHeight) {
+              width = width * maxHeight / height
+              height = maxHeight;
+            }
+
+            function resizeModal() {
+
+              var w = isMax ? originW * 1.5 : width
+                , h = isMax ? originH * 1.5 : height
+                ;
+
+              h = Math.min(h, maxHeight);
+
+              $modal.css({
+                  left: baseLeft + (screenWidth - w) / 2
+                , top: baseTop + (screenHeight - h - hpaddings) / 2
+                , width: w + 30
+              })
+
+              $modal.find('.modal-body').css({
+                  height: h + 30
+                , maxHeight: h + 30
+                , padding: '0 15px'
+              })
+
+            }
+
+            var isMax = false;
+            resizeModal();
+
+            $modal.find('a.btn.max').bind('click', function(){
+                isMax = ! isMax;
+                resizeModal();
             })
 
-            $modal.find('.modal-body').css({
-                height: h + 30
-              , maxHeight: h + 30
-              , padding: '0 15px'
-            })
+        });
 
-          }
+        if(onError) $load.error(onError);
 
-          var isMax = false;
-          resizeModal();
+        $load.attr('src', src);
+      }
 
-          $modal.find('a.btn.max').bind('click', function(){
-              isMax = ! isMax;
-              resizeModal();
-          })
+      loadBigImage($load.data('url'), function(err) {
+          loadBigImage('/' + image.id + '/reload');
+      })
 
-      });
-
-      $load.attr('src', $load.data('url'));
     }
 })()

@@ -40,8 +40,11 @@ var appko = appko || {};
                 $tb_html.bind('click', function(e){
                     e.preventDefault();
                     appko.popoverImage(image);
-                })
+                });
                 _callback();
+            }).error(function(event){
+                console.log('error')
+                console.error(event);
             })
 
         }, callback)

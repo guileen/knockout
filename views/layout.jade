@@ -16,6 +16,9 @@ html
             li(class= pageid == 'mark' && 'active'): a(href='/mark') Mark
             li(class= pageid == 'pop' && 'active'): a(href='/pop') Popular
             li(class= pageid == 'ko' && 'active'): a(href='/ko') Knockout
+
+            if(pageid == 'ko')
+              h3 Click on the picture you like
         if(username)
           span current user is 
             a#username(href="javascript:void(0)")= username
