@@ -69,7 +69,7 @@ app.configure('production', function(){
 });
 
 app.locals({
-    title: 'HD-images'
+    title: 'Knockout'
   , debug: app.settings.env == 'development'
   , config: config
   , pageid: 'main'

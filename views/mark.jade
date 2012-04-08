@@ -5,8 +5,8 @@ block content
     if(username)
       ul.nav.nav-pills
         li(class= pageid == 'main' && 'active'): a(href='/') Knockout
-        li(class= pageid == 'pop' && 'active'): a(href='/pop') Popular
         li(class= pageid == 'mark' && 'active'): a(href='/mark') Mark
+        li(class= pageid == 'pop' && 'active'): a(href='/pop') Popular
     if(username)
       span current user is 
         a#username(href="javascript:void(0)")= username
@@ -56,5 +56,7 @@ block scripts
   script#tb-image(type='template')
     a(href='#').tb-small
       img.thumbnail
+    h6 {meta_text}
+    p {text}
   //(src='{tbUrl}')
-  script(src='/assets/js/main.js')
+  script(src='/assets/js/mark.js')

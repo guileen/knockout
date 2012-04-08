@@ -23,6 +23,7 @@ var appko = {};
         var $inspos = $('i.insert-pos')
 
         async.forEachLimit(images, 4, function(image, _callback) {
+            console.log(image);
             var html = render(html_tb_image, image)
             var $tb_html = $(html);
             var $img = $tb_html.find('img');

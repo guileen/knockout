@@ -92,7 +92,7 @@ function loadPageImages() {
             url: src
           , width: width
           , height: height
-          , text: $img.attr('title') || $img.attr('alt')
+          , text: $img.attr('title') || $img.attr('alt') || ''
           }
         }
       }

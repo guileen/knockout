@@ -5,8 +5,8 @@ block content
     if(username)
       ul.nav.nav-pills
         li(class= pageid == 'main' && 'active'): a(href='/') Knockout
-        li(class= pageid == 'pop' && 'active'): a(href='/pop') Popular
         li(class= pageid == 'favorite' && 'active'): a(href='/mark') Mark
+        li(class= pageid == 'pop' && 'active'): a(href='/pop') Popular
     if(username)
       span current user is 
         a#username(href="javascript:void(0)")= username
