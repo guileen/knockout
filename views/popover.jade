@@ -9,6 +9,7 @@ script#tb-popover(type='template')
           img.main.fullwidth(src='{tbUrl}', data-id='{id}', data-url='{url}')
           img.load(data-id='{id}', data-url='{url}', style='display:none')
       .modal-footer
+        img.loading(src='/assets/img/loading.gif')
         p {text}
         a.btn.max Max
         a.btn(data-dismiss='modal') Close

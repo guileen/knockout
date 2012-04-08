@@ -17,6 +17,7 @@ var appko = {};
       var $html = $(html);
       var $modal = $html.find('.modal');
       var $load = $modal.find('img.load');
+      var $loading = $modal.find('img.loading');
       var $mainimg = $modal.find('img.main');
 
       var screenHeight = $(window).height();
@@ -30,6 +31,9 @@ var appko = {};
 
       $load.load(function(){
           $mainimg.attr('src', $load.data('url'));
+
+          $loading.hide();
+
           var originW = $load.width()
             , originH = $load.height()
             , width = originW
@@ -40,16 +44,10 @@ var appko = {};
 
           var maxHeight = screenHeight - hpaddings;
 
-          console.log('maxHeight %s', maxHeight);
-          console.log('width %s', width);
-          console.log('height %s', height);
           if(height > maxHeight) {
             width = width * maxHeight / height
             height = maxHeight;
           }
-
-          console.log('resized width %s', width)
-          console.log('resized height %s', height)
 
           function resizeModal() {
 
