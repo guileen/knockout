@@ -10,13 +10,19 @@ var exports = module.exports = function(app) {
     , service = require('../lib')
     ;
 
-  app.get('/', function(req, res){
+  app.get('/ko', function(req, res){
       // TODO staticfy
       res.render('index');
   });
 
   app.get('/pop', function(req, res, next) {
       res.redirect('/mark');
+  })
+
+  app.get('/', function(req, res, next) {
+      res.render('mark', {
+          pageid: 'mark'
+      })
   })
 
   app.get('/mark', function(req, res, next) {

@@ -72,7 +72,7 @@ app.locals({
     title: 'Knockout'
   , debug: app.settings.env == 'development'
   , config: config
-  , pageid: 'main'
+  , pageid: 'ko'
 });
 
 app.dynamicHelpers({

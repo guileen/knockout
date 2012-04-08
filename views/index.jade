@@ -1,32 +1,6 @@
 extend layout
 
 block content
-  header
-    if(username)
-      ul.nav.nav-pills
-        li(class= pageid == 'main' && 'active'): a(href='/') Knockout
-        li(class= pageid == 'favorite' && 'active'): a(href='/mark') Mark
-        li(class= pageid == 'pop' && 'active'): a(href='/pop') Popular
-    if(username)
-      span current user is 
-        a#username(href="javascript:void(0)")= username
-      &nbsp;
-      form(method='get', action='/search').form-search.inline
-        input.input-medium.search-query(type="search", name="q")
-        button.btn(type="submit") Search
-      &nbsp;
-      a.btn.btn-primary#upload upload image
-      - var marklet_code = '(function(a,b){if(a.__IMGKO_MAIN__)return a.__IMGKO_MAIN__();if(!a.__IMGKO_LOADED__){var c=b.createElement("script");c.src="{marklet_loader_js}?"+Math.floor(new Date/1e7),b.body.appendChild(c)}})(window,document)';
-      - marklet_code = marklet_code.replace('{marklet_loader_js}', config.marklet_loader_js)
-      &nbsp;
-      a.btn#marklet-tool(href='javascript:void(#{marklet_code})') 采集工具
-    else
-      form(method='post', action='/login').form-inline
-        span not login
-        &nbsp;
-        input.input-small(name='username', placeholder=username)
-        button.btn.btn-primary(type='submit') Login
-
   .row
     for id in [0, 1]
       .span6
@@ -42,18 +16,6 @@ block content
                   i.insert-pos
 
 block scripts
-  script#upload-content(type="template")
-    form(action='/upload', method='post').form-inline
-      input(name="imageurl", placeholder="http://")
-      button.btn.btn-primary(type='submit') +
-    a.btn.btn-danger.close-popover close
-
-  script#switch-user(type="template")
-    form(method='post', action='/login').form-inline
-      input.input-small(name='username', placeholder=username)
-      button.btn(type='submit') switch user
-    a.btn.btn-danger.close-popover close
-
   script#pk-image(type='template')
     a.btn(href="/{id}/remove")
       i.icon-trash
