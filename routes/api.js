@@ -38,7 +38,13 @@ var exports = module.exports = function(app) {
       var user = req.session.username;
       service.getPkImages(user, function(err, data) {
           if(err) {return next(err);}
-          res.json(data);
+          res.json({
+              // TODO simplefy this
+              pkImages: data.pkImages
+              // remove hotImages in ko page
+            , hotImages: []
+            , foundPair: data.foundPair
+          });
       })
   })
 
