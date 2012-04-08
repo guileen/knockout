@@ -60,7 +60,7 @@ var exports = module.exports = function(app) {
         ;
       service.removeImage(user, imageid, function(err, data) {
           if(err) {return next(err);}
-          res.redirect('/');
+          res.redirect('/ko');
       })
   })
 
@@ -110,7 +110,7 @@ var exports = module.exports = function(app) {
         ;
       service.koImage(user, left, right, function(err, data) {
           if(err) {return next(err);}
-          res.redirect('/');
+          res.redirect('/ko');
       })
   });
 
