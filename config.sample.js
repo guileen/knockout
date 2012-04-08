@@ -1,5 +1,5 @@
 var exports = module.exports = {
-  siteRoot : 'http://dev'
+  staticRoot : 'http://dev:3000'
 , redis: {
     host: 'localhost'
   , port: 6379

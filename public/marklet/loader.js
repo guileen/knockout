@@ -5,16 +5,16 @@ if (window.__IMGKO_LOADED__) return;
 if (!checkJQuery()) {
   loadjs('http://code.jquery.com/jquery-1.7.2.min.js');
 }
-loadcss('http://dev:3000/marklet/marklet.css');
-loadjs('http://dev:3000/marklet/marklet.js');
-// loadjs('http://dev:3000/marklet/bootstrap-transition.js');
-// loadjs('http://dev:3000/marklet/bootstrap-modal.js');
-// loadjs('http://dev:3000/marklet/bootstrap-tooltip.js');
-// loadjs('http://dev:3000/marklet/bootstrap-popover.js');
-// loadjs('http://dev:3000/assets/js/jade.runtime.js');
-// loadjs('http://dev:3000/marklet/stage_template.js');
-// loadjs('http://dev:3000/marklet/tb_template.js');
-// loadjs('http://dev:3000/marklet/main.js');
+loadcss('@BASE_URL/marklet/marklet.css');
+loadjs('@BASE_URL/marklet/marklet.js');
+// loadjs('@BASE_URL/marklet/bootstrap-transition.js');
+// loadjs('@BASE_URL/marklet/bootstrap-modal.js');
+// loadjs('@BASE_URL/marklet/bootstrap-tooltip.js');
+// loadjs('@BASE_URL/marklet/bootstrap-popover.js');
+// loadjs('@BASE_URL/assets/js/jade.runtime.js');
+// loadjs('@BASE_URL/marklet/stage_template.js');
+// loadjs('@BASE_URL/marklet/tb_template.js');
+// loadjs('@BASE_URL/marklet/main.js');
 
 
 function checkJQuery() {

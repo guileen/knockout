@@ -3,7 +3,7 @@
  *
  * v0.1
  *
- * 
+ * Mon Apr 09 2012 02:30:39 GMT+0800 (CST)
  */
 (function(window, undefined) {
 
@@ -12,6 +12,7 @@ var document = window.document,
 	navigator = window.navigator,
 	location = window.location;
 var $ = jQuery = jQuery.noConflict();
+
 /* ===================================================
  * bootstrap-transition.js v2.0.2
  * http://twitter.github.com/bootstrap/javascript.html#transitions
@@ -63,6 +64,7 @@ var $ = jQuery = jQuery.noConflict();
   })
 
 }( jQuery );
+
 /* ===========================================================
  * bootstrap-tooltip.js v2.0.2
  * http://twitter.github.com/bootstrap/javascript.html#tooltips
@@ -333,6 +335,7 @@ var $ = jQuery = jQuery.noConflict();
   }
 
 }( jQuery );
+
 /* ===========================================================
  * bootstrap-popover.js v2.0.2
  * http://twitter.github.com/bootstrap/javascript.html#popovers
@@ -427,7 +430,8 @@ var $ = jQuery = jQuery.noConflict();
   , template: '<div class="popover"><div class="arrow"></div><div class="popover-inner"><h3 class="popover-title"></h3><div class="popover-content"><p></p></div></div></div>'
   })
 
-}( jQuery );/* =========================================================
+}( jQuery );
+/* =========================================================
  * bootstrap-modal.js v2.0.1
  * http://twitter.github.com/bootstrap/javascript.html#modals
  * =========================================================
@@ -651,6 +655,7 @@ var $ = jQuery = jQuery.noConflict();
 
 }( jQuery );
 
+
 var jade = (function(exports){
 /*!
  * Jade - runtime
@@ -760,6 +765,7 @@ exports.templates = {};
   return exports;
 
 })({});
+
 var stage_template = function(locals){ var attrs = jade.attrs, escape = jade.escape, rethrow = jade.rethrow;
 var buf = [];
 with (locals || {}) {
@@ -805,6 +811,7 @@ buf.push(' href="#" data-dismiss="modal" class="submit btn btn-primary"')
 buf.push('>Save changes</a></div></div></div></div></div>');
 }
 return buf.join("");}
+
 var tb_template = function(locals){ var attrs = jade.attrs, escape = jade.escape, rethrow = jade.rethrow;
 var buf = [];
 with (locals || {}) {
@@ -837,6 +844,7 @@ buf.push('<span>' + escape((interp = img.width) == null ? '' : interp) + ' x ' +
 buf.push('</a>');
 }
 return buf.join("");}
+
 
 
 // from nothing.js
@@ -1090,5 +1098,6 @@ window.__IMGKO_MAIN__ = function() {
 __IMGKO_MAIN__();
 
 window.__IMGKO_LOADED__ = true;
+
 
 })(window/*, undefined*/);

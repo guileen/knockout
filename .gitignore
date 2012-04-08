@@ -10,3 +10,4 @@ node_modules
 /* public/marklet/marklet.css */
 /* public/marklet/stage_template.js */
 /* public/marklet/tb_template.js */
+config.js
