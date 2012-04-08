@@ -11,6 +11,8 @@ var config = require('./config')
   , resolve = path.resolve
   ;
 
+var PORT = process.env.PORT || 3000;
+
 config.tmpUploadFolder = resolve(config.tmpUploadFolder) + '/';
 config.uploadFolder = resolve(config.uploadFolder) + '/';
 fs.mkdir(config.tmpUploadFolder)
@@ -90,5 +92,5 @@ app.use(function(err, req, res, next) {
 require('./routes')(app);
 require('./routes/api')(app);
 
-app.listen(3000);
+app.listen(PORT);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
