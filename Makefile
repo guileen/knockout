@@ -17,10 +17,10 @@ MARKLET_JS = public/marklet/marklet.js
 
 MARKLET_VER = 0.1
 
-all:
-	@@mkdir -p ${BUILD}
-	@@jade -c -D --out ${STAGE_TEMPLATE} --var stage_template views/marklet/stage.jade
-	@@jade -c -D --out ${TB_TEMPLATE} --var tb_template views/marklet/tb.jade
+all:jade marklet
+	@@echo make done.
+
+marklet:
 	@@cat ${MARKLET_MODULES} | \
 			sed 's/(function( window ) {//' | \
 			sed 's/}...window..;//' | \
@@ -30,4 +30,7 @@ all:
 			sed 's/@BASE_URL/'"${BASE_URL}"'/' | \
 			sed "s/@VERSION/${MARKLET_VER}/" > ${MARKLET_JS}
 	uglifyjs --unsafe ${MARKLET_JS} > public/marklet/marklet.min.js
-	@@echo make done.
+
+jade:
+	@@jade -c -D --out ${STAGE_TEMPLATE} --var stage_template views/marklet/stage.jade
+	@@jade -c -D --out ${TB_TEMPLATE} --var tb_template views/marklet/tb.jade
