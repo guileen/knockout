@@ -3,6 +3,8 @@ public/upload/
 public/assets/css/marklet.css
 public/assets/css/style.css
 *.min.js
+*.swp
+node_modules
 /* public/marklet/marklet.js */
 /* public/marklet/templates.js */
 /* public/marklet/marklet.css */
