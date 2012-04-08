@@ -76,6 +76,14 @@ var exports = module.exports = function(app) {
       })
   })
 
+  app.get('/:imageid/thumbnail', function(req, res, next) {
+      var imageid = req.params.imageid
+      service.reloadThumbnail(imageid, function(err, data) {
+          if(err) {return next(err);}
+          fs.createReadStream(data.tbFilename).pipe(res);
+      })
+  })
+
   app.get('/:left/ko/:right', function(req, res, next) {
       // left + 1
       // right - 1

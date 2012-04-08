@@ -7,9 +7,14 @@ var config = require('./config')
   , redis = require('redis')
   , fs = require('fs')
   , request = require('request')
+  , path = require('path')
+  , resolve = path.resolve
+  ;
 
+config.tmpUploadFolder = resolve(config.tmpUploadFolder) + '/';
+config.uploadFolder = resolve(config.uploadFolder) + '/';
 fs.mkdir(config.tmpUploadFolder)
-fs.mkdir(config.uploadFoler)
+fs.mkdir(config.uploadFolder)
 
 config.redisClient = redis.createClient(config.redis.port, config.redis.host)
 

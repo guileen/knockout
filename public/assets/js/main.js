@@ -10,13 +10,22 @@ var appko = {};
       return html;
     }
 
+    function joinImageId(images, exclude) {
+      return images.filter(function(i) {
+          return i != exclude;
+      }).map(function(i) {
+          return i.id;
+      }).join('--');
+    }
+
     var html_pk_image = $('#pk-image').html()
-      , html_tb_image = $('#tb-image').html();
+      , html_tb_image = $('#tb-image').html()
+      , pkImages
+      , hotImages;
 
     $.get('/api/pkimages', function(data) {
-        var pkImages = data.pkImages
-          , hotImages = data.hotImages
-          ;
+        pkImages = data.pkImages
+        hotImages = data.hotImages
         if(data.foundPair) {
           async.forEach(pkImages, loadPkImage, function(err){
               loadHotImages(hotImages);
@@ -34,7 +43,7 @@ var appko = {};
             var html = render(html_tb_image, image)
             var $tb_html = $(html);
             var $img = $tb_html.find('img');
-            $img.attr('src', image.tbUrl || image.url).load(function(){
+            $img.attr('src', image.tbUrl || ('/' + image.id + '/thumbnail')).load(function(){
                 var $pos = (image.tbWidth > 130 && image.width > image.height) ? $winspos : $inspos;
                 var minpos = $pos[0]
                 $pos.each(function(){
@@ -52,6 +61,8 @@ var appko = {};
 
     var imgpk_pos = 0;
     function loadPkImage(image, callback) {
+
+      image.others = joinImageId(pkImages, image);
       var $pkImage = $(render(html_pk_image, image));
       var $img = $pkImage.find('img');
       var url = $img.data('url');
