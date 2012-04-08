@@ -11,7 +11,7 @@ var config = require('./config')
   , resolve = path.resolve
   ;
 
-var PORT = process.env.PORT || 3000;
+var PORT = process.env.PORT || config.port || 3000;
 
 config.tmpUploadFolder = resolve(config.tmpUploadFolder) + '/';
 config.uploadFolder = resolve(config.uploadFolder) + '/';
