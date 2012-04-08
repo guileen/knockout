@@ -1,4 +1,4 @@
-var appko = {};
+var appko = appko || {};
 (function(){
 
     // simple template
@@ -37,6 +37,10 @@ var appko = {};
                 })
 
                 $tb_html.insertBefore(minpos);
+                $tb_html.bind('click', function(e){
+                    e.preventDefault();
+                    appko.popoverImage(image);
+                })
                 _callback();
             })
 

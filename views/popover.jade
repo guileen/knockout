@@ -1,0 +1,15 @@
+script#tb-popover(type='template')
+  .tb-popover-container
+    .modal.hide
+      .modal-header
+        a.close(data-dismiss='modal') ×
+        h3 {meta_text}
+      .modal-body
+        .thumbnail
+          img.main.fullwidth(src='{tbUrl}', data-id='{id}', data-url='{url}')
+          img.load(data-id='{id}', data-url='{url}', style='display:none')
+      .modal-footer
+        p {text}
+        a.btn.max Max
+        a.btn(data-dismiss='modal') Close
+
