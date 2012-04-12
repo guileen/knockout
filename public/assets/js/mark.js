@@ -45,6 +45,7 @@ var appko = appko || {};
             }).error(function(event){
                 console.log('error')
                 console.error(event);
+                _callback();
             })
 
         }, callback)
