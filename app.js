@@ -93,4 +93,4 @@ require('./routes')(app);
 require('./routes/api')(app);
 
 app.listen(PORT);
-console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+console.log("Express server listening on port %d in %s mode", PORT /* app.address().port */, app.settings.env);
