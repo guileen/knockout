@@ -18,7 +18,7 @@ function check_make(f) {
   match = match && ! /(^\.|.*\/\.).*/.test(f)
   if( ! match ) return;
   console.log(f + ' changed, start make')
-  exec('make', function(error, stdout, stderr) {
+  exec('cake build', function(error, stdout, stderr) {
       if(error) myconsole.traceError(error);
       if(stdout) console.log(stdout);
       if(stderr) console.error(stderr);

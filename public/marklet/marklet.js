@@ -3,7 +3,7 @@
  *
  * v0.1
  *
- * Fri Apr 13 2012 02:30:49 GMT+0800 (CST)
+ * Fri Apr 13 2012 04:37:54 GMT+0800 (CST)
  */
 (function(window, undefined) {
 
@@ -966,8 +966,8 @@ function loadPageLinks() {
 
       var $link = $img.parent('a');
       var href = $link.attr('href');
-
-      if(href.indexOf('#') == 0 || href == src || href.indexOf('javascript') == 0) {
+      if(href == src) return;
+      if(href.indexOf('#') == 0 || href.indexOf('javascript') == 0) {
         // weibo
         var action_data = $link.attr('action-data');
         if(action_data) {

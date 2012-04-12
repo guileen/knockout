@@ -119,8 +119,8 @@ function loadPageLinks() {
 
       var $link = $img.parent('a');
       var href = $link.attr('href');
-
-      if(href.indexOf('#') == 0 || href == src || href.indexOf('javascript') == 0) {
+      if(href == src) return;
+      if(href.indexOf('#') == 0 || href.indexOf('javascript') == 0) {
         // weibo
         var action_data = $link.attr('action-data');
         if(action_data) {

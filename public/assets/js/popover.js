@@ -76,7 +76,7 @@ var appko = {};
             var isMax = false;
             resizeModal();
 
-            $modal.find('a.btn.max').bind('click', function(){
+            $modal.find('a.btn.max, .modal-body').bind('click', function(){
                 isMax = ! isMax;
                 resizeModal();
             })
