@@ -9,6 +9,6 @@ var exports = module.exports = {
 , uploadFolder : 'public/upload/'
 , tmpUploadFolder : '/tmp/upload/'
 , botTimeout : 3000
-, marklet_loader_js : 'http://dev:3000/marklet/loader.js'
+, marklet_loader_js : 'http://dev:3000/marklet/loader.min.js'
 }
 

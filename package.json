@@ -13,7 +13,6 @@
     , "redis": ">=0.0.1"
     , "connect-redis": ">=0.0.1"
     , "connect-less": ">=0.0.1"
-    , "jsdom": ">=0.0.1"
     , "imagemagick": ">=0.0.1"
   }
   , "devDependencies": {
