@@ -33,7 +33,7 @@ html
           - var marklet_code = '(function(a,b){if(a.__IMGKO_MAIN__)return a.__IMGKO_MAIN__();if(!a.__IMGKO_LOADED__){var c=b.createElement("script");c.src="{marklet_loader_js}?"+Math.floor(new Date/1e7),b.body.appendChild(c)}})(window,document)';
           - marklet_code = marklet_code.replace('{marklet_loader_js}', config.marklet_loader_js)
           &nbsp;
-          a.btn#marklet-tool(href='javascript:void(#{marklet_code})') 采集工具
+          a.btn#marklet-tool(href='javascript:void(#{marklet_code})', onclick="alert('把`采集工具`按钮拖到书签栏')") 采集工具
         else
           form(method='post', action='/login').form-inline
             span not login
