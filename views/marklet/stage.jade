@@ -31,6 +31,9 @@
       // h4 Overflowing text to show optional scrollbar
       // p We set a fixed <code>max-height</code> on the <code>.modal-body</code>. Watch it overflow with all this extra lorem ipsum text we've included.
     .modal-footer
+      .row
+        label nextPage
+        input(name='nextlink', value=#{nextLink})
       // form
       .row
         textarea.description(name='description') #{title}

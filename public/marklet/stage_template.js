@@ -26,7 +26,11 @@ buf.push('/><h4>链接</h4><div');
 buf.push(' class="links-stage"')
 buf.push('></div><!-- h4 Text in a modal--><!-- p Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem.--><!-- <hr>--><!-- h4 Overflowing text to show optional scrollbar--><!-- p We set a fixed <code>max-height</code> on the <code>.modal-body</code>. Watch it overflow with all this extra lorem ipsum text we\'ve included.--></div><div');
 buf.push(' class="modal-footer"')
-buf.push('><!-- form--><div');
+buf.push('><div');
+buf.push(' class="row"')
+buf.push('><label>nextPage</label><input');
+buf.push(' name="nextlink" value=" + (nextLink) + "')
+buf.push('/></div><!-- form--><div');
 buf.push(' class="row"')
 buf.push('><textarea');
 buf.push(' name="description" class="description"')

@@ -47,7 +47,6 @@ task 'marklet', 'build marklet', () ->
     fs.readFileSync(filename, 'utf8')
 
   marklet = marklet.join('\n')
-  console.log(marklet)
   marklet = marklet
     .replace(/\(function\( window \) {/g, '')
     .replace(/}...window..;/g, '')
@@ -57,7 +56,6 @@ task 'marklet', 'build marklet', () ->
     .replace(/@DATE/, new Date())
     .replace(/@VERSION/, VERSION)
     .replace(/@MARKLET_VER/, MARKLET_VER)
-  console.log(marklet)
   fs.writeFileSync(MARKLET_JS, marklet, 'utf8')
   exec "uglifyjs --unsafe #{MARKLET_JS} > #{MARKLET_MIN_JS}"
 

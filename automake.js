@@ -15,6 +15,7 @@ watch.createMonitor('.', { ignoreDotFiles: true }, function (monitor) {
 function check_make(f) {
   var match = f == 'Makefile' || /\.jade$/.test(f) || /public\/marklet\/.*\.js/.test(f);
   match = match && ! /.*\/(marklet|.*template)(.min)?.js$/.test(f)
+  match = match && ! /.*.min.js$/.test(f)
   match = match && ! /(^\.|.*\/\.).*/.test(f)
   if( ! match ) return;
   console.log(f + ' changed, start make')
